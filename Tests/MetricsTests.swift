@@ -16100,6 +16100,38 @@ struct MetricsTests {
                 ScreenCaptureTool.allCases.contains { $0.dedicatedShortcut?.role == role }
                },
                "no capture tool's shortcut row is left without something to register it")
+
+        // MARK: Product outcome placement
+
+        expect(AppFeature.allCases.count == 53,
+               "the product map covers the complete 53-feature catalog")
+        let placementCounts = Dictionary(grouping: AppFeature.allCases,
+                                         by: { $0.productPlacement.outcome })
+            .mapValues(\.count)
+        expect(placementCounts[.capture] == 8
+                && placementCounts[.workspace] == 15
+                && placementCounts[.create] == 1
+                && placementCounts[.meeting] == 4
+                && placementCounts[.health] == 11
+                && placementCounts[.agent] == 1
+                && placementCounts[.advanced] == 13,
+               "every feature has exactly one stable customer outcome")
+        let exposureCounts = Dictionary(grouping: AppFeature.allCases,
+                                        by: { $0.productPlacement.exposure })
+            .mapValues(\.count)
+        expect(exposureCounts[.primary] == 8
+                && exposureCounts[.contextual] == 32
+                && exposureCounts[.advanced] == 13,
+               "feature exposure keeps the first-run surface intentionally small")
+        expect(AppFeature.screenRecorder.productPlacement
+                == FeatureProductPlacement(outcome: .capture, exposure: .primary),
+               "screen recording is a first-class Capture capability")
+        expect(AppFeature.commandBar.productPlacement
+                == FeatureProductPlacement(outcome: .agent, exposure: .primary),
+               "the command bar is the human entrance to Ask Atlas")
+        expect(AppFeature.fanControl.productPlacement
+                == FeatureProductPlacement(outcome: .advanced, exposure: .advanced),
+               "specialist system controls remain advanced")
         // MARK: Private file store
 
         let privateRoot = FileManager.default.temporaryDirectory

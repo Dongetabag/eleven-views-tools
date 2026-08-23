@@ -17,6 +17,12 @@ The foundation pass is in progress:
 
 Client distribution is supported when each build is accompanied by access to its matching GPL source. Screenshot and recording link uploads ship off until an Eleven Views-owned service is provisioned. Feedback opens a visible Mail draft addressed to `dev@elevenviews.io`, and product links lead to [elevenviews.io](https://elevenviews.io).
 
+## Product direction
+
+Tools is organized around customer outcomes instead of an undifferentiated feature catalog: Capture, Workspace, Create, Meeting, Mac Health, Ask Atlas, and Advanced Tools. The complete 53-feature assignment is documented in [TOOLS_OUTCOME_MAP.md](docs/product/TOOLS_OUTCOME_MAP.md) and enforced by an exhaustive Swift mapping.
+
+The context-first Story foundation turns a real Tools workflow capture into a reviewed Story Brief, approved Story Plan, editable Scene Project, and versioned output. The product specification is [CONTEXT_FIRST_STORY_SYSTEM.md](docs/product/CONTEXT_FIRST_STORY_SYSTEM.md); versioned schemas and examples live in [docs/story](docs/story/README.md).
+
 ## Build locally
 
 Requirements:

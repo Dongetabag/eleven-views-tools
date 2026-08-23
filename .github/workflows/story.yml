@@ -1,0 +1,37 @@
+name: Story contracts
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "docs/product/**"
+      - "docs/story/**"
+      - "Tools/story/**"
+      - "Sources/Vorssaint/Core/FeatureCatalog.swift"
+      - "Sources/Vorssaint/Core/FeatureProductPlacement.swift"
+      - ".github/workflows/story.yml"
+  pull_request:
+    paths:
+      - "docs/product/**"
+      - "docs/story/**"
+      - "Tools/story/**"
+      - "Sources/Vorssaint/Core/FeatureCatalog.swift"
+      - "Sources/Vorssaint/Core/FeatureProductPlacement.swift"
+      - ".github/workflows/story.yml"
+
+jobs:
+  contract:
+    name: Story schema + outcome map
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install jsonschema
+        run: python -m pip install --disable-pip-version-check jsonschema
+
+      - name: Validate Story contracts and examples
+        run: python3 Tools/story/check_story_contract.py

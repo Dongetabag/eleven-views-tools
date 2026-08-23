@@ -1,0 +1,66 @@
+{
+  "schema": "story.scene-project.v1",
+  "projectId": "story-project.capture-to-desk-demo",
+  "version": "1.0.0",
+  "state": "review-ready",
+  "storyContextRef": "story-context.eleven-views.desk",
+  "productContextRef": "product-context.desk.2026-08-23",
+  "presenterProfileRef": "presenter.simeon-founder",
+  "briefRef": "brief.capture-to-desk-demo",
+  "planRef": "plan.capture-to-desk-demo",
+  "sourceRefs": ["flow-capture.capture-to-desk.001"],
+  "scenes": [
+    {
+      "sceneId": "scene.problem",
+      "order": 1,
+      "purpose": "State the governance problem",
+      "source": { "assetRef": "asset.capture-to-desk.mov", "startMs": 0, "endMs": 7000 },
+      "visual": {
+        "layout": "product-full",
+        "focus": { "mode": "none" },
+        "presenterVisibility": "narration-only"
+      },
+      "interaction": { "type": "none" },
+      "narration": {
+        "text": "AI taking actions is not enough. You need to know what happened.",
+        "source": "elevenlabs",
+        "audioAssetRef": "asset.narration.problem.wav",
+        "waveformAssetRef": "asset.waveform.problem.json",
+        "scriptVersion": "1.0.0"
+      },
+      "captions": { "enabled": true, "assetRef": "asset.captions.problem.vtt", "style": "eleven-views-default" },
+      "durationMs": 7000
+    },
+    {
+      "sceneId": "scene.capture",
+      "order": 2,
+      "purpose": "Show capture, review, approval, and verification",
+      "source": { "assetRef": "asset.capture-to-desk.mov", "startMs": 7000, "endMs": 25000 },
+      "visual": {
+        "layout": "product-full",
+        "focus": { "mode": "automatic", "x": 862, "y": 421, "width": 420, "height": 260, "zoom": 1.6 },
+        "presenterVisibility": "narration-only"
+      },
+      "interaction": { "type": "none" },
+      "narration": {
+        "text": "Tools captures locally. You review the exact artifact and destination before Desk verifies what was stored.",
+        "source": "elevenlabs",
+        "audioAssetRef": "asset.narration.capture.wav",
+        "waveformAssetRef": "asset.waveform.capture.json",
+        "scriptVersion": "1.0.0"
+      },
+      "captions": { "enabled": true, "assetRef": "asset.captions.capture.vtt", "style": "eleven-views-default" },
+      "soundPreset": "Soft Click",
+      "durationMs": 18000
+    }
+  ],
+  "outputs": [
+    { "outputId": "output.website", "kind": "video", "aspectRatio": "16:9", "status": "planned" },
+    { "outputId": "output.linkedin", "kind": "video", "aspectRatio": "9:16", "status": "planned" }
+  ],
+  "qaReceiptRef": "receipt.qa.capture-to-desk.001",
+  "renderReceiptRefs": [],
+  "approval": { "status": "pending" },
+  "createdAt": "2026-08-23T20:12:00Z",
+  "updatedAt": "2026-08-23T20:20:00Z"
+}

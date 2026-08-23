@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://elevenviews.io/schemas/story/story-brief.v1.schema.json",
+  "title": "Story Brief v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "briefId", "version", "status", "storyContextRef", "productContextRef", "goal", "audienceRef", "formats", "channels", "sourceRefs", "requestedBy", "createdAt"],
+  "properties": {
+    "schema": { "const": "story.brief.v1" },
+    "briefId": { "$ref": "common.v1.schema.json#/$defs/identifier" },
+    "version": { "type": "string", "minLength": 1, "maxLength": 80 },
+    "status": { "type": "string", "enum": ["draft", "ready", "superseded"] },
+    "storyContextRef": { "$ref": "common.v1.schema.json#/$defs/identifier" },
+    "productContextRef": { "$ref": "common.v1.schema.json#/$defs/identifier" },
+    "goal": { "type": "string", "minLength": 1, "maxLength": 2000 },
+    "audienceRef": { "$ref": "common.v1.schema.json#/$defs/identifier" },
+    "formats": {
+      "type": "array",
+      "items": { "type": "string", "enum": ["interactive-demo", "product-video", "short", "tutorial", "launch-pack", "website-visual", "guide"] },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "channels": { "type": "array", "items": { "type": "string", "minLength": 1, "maxLength": 120 }, "minItems": 1, "uniqueItems": true },
+    "targetLengthSeconds": { "type": "integer", "minimum": 5, "maximum": 3600 },
+    "cta": { "type": "string", "maxLength": 800 },
+    "presenterProfileRef": { "$ref": "common.v1.schema.json#/$defs/identifier" },
+    "sourceRefs": { "type": "array", "items": { "$ref": "common.v1.schema.json#/$defs/identifier" }, "minItems": 1, "uniqueItems": true },
+    "constraints": { "type": "array", "items": { "type": "string", "minLength": 1, "maxLength": 1000 } },
+    "requestedBy": { "$ref": "common.v1.schema.json#/$defs/identifier" },
+    "createdAt": { "$ref": "common.v1.schema.json#/$defs/timestamp" }
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://elevenviews.io/schemas/story/story-context.v1.schema.json",
+  "title": "Atlas Story Context v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "contextId", "version", "status", "scope", "identity", "brand", "audiences", "messaging", "claims", "proof", "presenterRefs", "channels", "visualRules", "audioRules", "terminology", "privacyRules", "sourceRefs", "verifiedAt"],
+  "properties": {
+    "schema": { "const": "atlas.story-context.v1" },
+    "contextId": { "$ref": "common.v1.schema.json#/$defs/identifier" },
+    "version": { "type": "string", "minLength": 1, "maxLength": 80 },
+    "status": { "type": "string", "enum": ["draft", "reviewed", "approved", "superseded"] },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["companyId"],
+      "properties": {
+        "companyId": { "$ref": "common.v1.schema.json#/$defs/identifier" },
+        "clientId": { "$ref": "common.v1.schema.json#/$defs/identifier" },
+        "productId": { "$ref": "common.v1.schema.json#/$defs/identifier" }
+      }
+    },
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "domain", "productFamilies"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "domain": { "type": "string", "format": "hostname" },
+        "productFamilies": { "type": "array", "items": { "type": "string", "minLength": 1, "maxLength": 160 }, "uniqueItems": true },
+        "logoAssetRefs": { "type": "array", "items": { "$ref": "common.v1.schema.json#/$defs/identifier" }, "uniqueItems": true }
+      }
+    },
+    "brand": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["colors", "typography", "styleRules"],
+      "properties": {
+        "colors": { "type": "object", "additionalProperties": { "type": "string", "minLength": 1, "maxLength": 80 } },
+        "typography": { "type": "object", "additionalProperties": { "type": "string", "minLength": 1, "maxLength": 160 } },
+        "styleRules": { "type": "array", "items": { "type": "string", "minLength": 1, "maxLength": 800 } }
+      }
+    },
+    "productContextRef": { "$ref": "common.v1.schema.json#/$defs/identifier" },
+    "audiences": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["audienceId", "name", "problems", "desiredOutcomes"],
+        "properties": {
+          "audienceId": { "$ref": "common.v1.schema.json#/$defs/identifier" },
+          "name": { "type": "string", "minLength": 1, "maxLength": 200 },
+          "problems": { "type": "array", "items": { "type": "string", "minLength": 1, "maxLength": 800 } },
+          "desiredOutcomes": { "type": "array", "items": { "type": "string", "minLength": 1, "maxLength": 800 } },
+          "objections": { "type": "array", "items": { "type": "string", "minLength": 1, "maxLength": 800 } }
+        }
+      }
+    },
+    "messaging": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["positioning", "approvedMessages", "disallowedMessages", "voiceRules"],
+      "properties": {
+        "positioning": { "type": "string", "minLength": 1, "maxLength": 2000 },
+        "approvedMessages": { "type": "array", "items": { "type": "string", "minLength": 1, "maxLength": 1000 } },
+        "disallowedMessages": { "type": "array", "items": { "type": "string", "minLength": 1, "maxLength": 1000 } },
+        "voiceRules": { "type": "array", "items": { "type": "string", "minLength": 1, "maxLength": 800 } },
+        "ctaPatterns": { "type": "array", "items": { "type": "string", "minLength": 1, "maxLength": 500 } }
+      }
+    },
+    "claims": { "type": "array", "items": { "$ref": "common.v1.schema.json#/$defs/claim" } },
+    "proof": { "type": "array", "items": { "$ref": "common.v1.schema.json#/$defs/assetRef" } },
+    "presenterRefs": { "type": "array", "items": { "$ref": "common.v1.schema.json#/$defs/identifier" }, "uniqueItems": true },
+    "channels": { "type": "object", "additionalProperties": { "type": "object" } },
+    "visualRules": { "type": "array", "items": { "type": "string", "minLength": 1, "maxLength": 1000 } },
+    "audioRules": { "type": "array", "items": { "type": "string", "minLength": 1, "maxLength": 1000 } },
+    "terminology": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["term", "rule"],
+        "properties": {
+          "term": { "type": "string", "minLength": 1, "maxLength": 160 },
+          "rule": { "type": "string", "minLength": 1, "maxLength": 800 }
+        }
+      }
+    },
+    "privacyRules": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["defaultClassification", "blockedPatterns", "prohibitedScreens"],
+      "properties": {
+        "defaultClassification": { "type": "string", "enum": ["public", "company", "client", "owner-only"] },
+        "blockedPatterns": { "type": "array", "items": { "type": "string", "minLength": 1, "maxLength": 500 } },
+        "prohibitedScreens": { "type": "array", "items": { "type": "string", "minLength": 1, "maxLength": 500 } },
+        "externalProviderRules": { "type": "array", "items": { "type": "string", "minLength": 1, "maxLength": 1000 } }
+      }
+    },
+    "sourceRefs": { "type": "array", "items": { "$ref": "common.v1.schema.json#/$defs/sourceRef" }, "minItems": 1 },
+    "verifiedAt": { "$ref": "common.v1.schema.json#/$defs/timestamp" },
+    "approvedBy": { "$ref": "common.v1.schema.json#/$defs/identifier" }
+  }
+}

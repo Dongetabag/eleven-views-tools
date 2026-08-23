@@ -1,0 +1,57 @@
+{
+  "schema": "atlas.presenter-profile.v1",
+  "profileId": "presenter.simeon-founder",
+  "version": "1.0.0",
+  "status": "approved",
+  "identity": {
+    "name": "Simeon Reid",
+    "role": "Founder, Eleven Views",
+    "photoAssetRef": "asset.presenter.simeon-photo",
+    "displayName": "Simeon"
+  },
+  "voice": {
+    "source": "elevenlabs",
+    "provider": "elevenlabs",
+    "voiceId": "managed-secret-reference-only",
+    "model": "approved-model",
+    "style": "founder",
+    "speed": 0.96,
+    "language": "en-US",
+    "settings": { "delivery": "calm-confident" },
+    "pronunciations": [
+      { "term": "Eleven Views", "pronunciation": "Eleven Views" },
+      { "term": "Atlas", "pronunciation": "Atlas" }
+    ]
+  },
+  "presentation": {
+    "preset": "founder",
+    "visibility": "narration-only",
+    "waveform": "compact",
+    "captionStyle": "eleven-views-default"
+  },
+  "assets": [
+    {
+      "assetId": "asset.presenter.simeon-photo",
+      "kind": "image",
+      "uri": "file:///owner-only/presenters/simeon.png",
+      "sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+      "bytes": 1,
+      "mediaType": "image/png",
+      "privacy": "owner-only"
+    }
+  ],
+  "sourceRefs": [
+    {
+      "sourceId": "source.presenter.simeon",
+      "kind": "human",
+      "label": "Presenter profile approved by its owner",
+      "observedAt": "2026-08-23T20:00:00Z",
+      "confidence": "high",
+      "derivation": "provided",
+      "approvedBy": "simeon-reid",
+      "approvedAt": "2026-08-23T20:00:00Z"
+    }
+  ],
+  "verifiedAt": "2026-08-23T20:00:00Z",
+  "approvedBy": "simeon-reid"
+}
