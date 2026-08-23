@@ -1,0 +1,23 @@
+{
+  "schema": "elevenviews.bridge.request.v1",
+  "requestId": "7f4e2a91-0c3b-4d5e-8a1f-2b9c0d3e4f5a",
+  "capability": "share.attachToDeskIssue",
+  "scope": "share",
+  "parameters": {
+    "issueId": "6125b020-f7d3-468b-bf6b-13c5c9844939",
+    "filePath": "/Users/simeon/Library/Application Support/io.elevenviews.tools/captures/region-20260823-162501.png"
+  },
+  "caller": {
+    "id": "io.elevenviews.desk",
+    "name": "Eleven Views Desk",
+    "teamId": "EV11VIEWS0",
+    "signingIdentifier": "io.elevenviews.desk"
+  },
+  "approval": {
+    "token": "appr_share_9c0b3d55",
+    "grantedBy": "local-user-action",
+    "grantedAt": "2026-08-23T16:30:00Z",
+    "expiresAt": "2026-08-23T16:35:00Z"
+  },
+  "requestedAt": "2026-08-23T16:30:01Z"
+}

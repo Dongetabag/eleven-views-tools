@@ -15,4 +15,7 @@ python3 "$here/bridge_tool.py" validate
 echo "== signed-IPC decision-table proof =="
 python3 "$here/bridge_ipc_proof.py"
 
+echo "== Desk attachments API proof =="
+python3 "$here/desk_attachments_proof.py" --skip-if-unconfigured
+
 echo "All bridge checks passed."

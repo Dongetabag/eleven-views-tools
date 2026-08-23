@@ -96,6 +96,11 @@ struct ElevenViewsToolsAppShortcuts: AppShortcutsProvider {
             ],
             shortTitle: "System Snapshot",
             systemImageName: "gauge.with.dots.needle.33percent")
+        AppShortcut(
+            intent: AttachToDeskIssueIntent(),
+            phrases: ["Attach a file to Desk with \(.applicationName)"],
+            shortTitle: "Attach to Desk",
+            systemImageName: "paperclip")
     }
 }
 #endif

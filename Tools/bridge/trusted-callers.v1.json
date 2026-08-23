@@ -11,7 +11,8 @@
       "allowedCapabilities": [
         "system.snapshot",
         "screen.captureRegion",
-        "screen.captureFull"
+        "screen.captureFull",
+        "share.attachToDeskIssue"
       ]
     },
     {
