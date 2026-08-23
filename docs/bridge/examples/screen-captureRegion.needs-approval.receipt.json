@@ -1,0 +1,20 @@
+{
+  "schema": "elevenviews.bridge.receipt.v1",
+  "receiptId": "b7f3a1c2-9d4e-4a6b-8c1d-2e3f4a5b6c7d",
+  "requestId": "9c0b3d55-2e77-4b90-a1f2-6d4e8b2c1a09",
+  "capability": "screen.captureRegion",
+  "outcome": "needs_approval",
+  "permissionsUsed": [],
+  "approval": null,
+  "error": {
+    "code": "approval_required",
+    "message": "screen.captureRegion requires a local-user approval token."
+  },
+  "startedAt": "2026-08-23T16:25:00Z",
+  "completedAt": "2026-08-23T16:25:00Z",
+  "host": {
+    "app": "Eleven Views Tools",
+    "version": "3.3.3-beta.2",
+    "registryVersion": 1
+  }
+}
