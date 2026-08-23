@@ -34,6 +34,16 @@ struct CaptureScreenRegionIntent: AppIntent {
         // before reading pixels rather than treating invocation as consent.
         try await requestConfirmation()
 
+        // The bridge handler is deliberately side-effect-free around TCC and
+        // only reports a missing grant. The user-facing intent owns the native
+        // permission request. Without this gate, a first capture from
+        // Shortcuts could only fail with `needs_permission` and never give the
+        // person a way to authorize it.
+        guard CGPreflightScreenCaptureAccess()
+                || Permissions.shared.requestScreenRecording() else {
+            throw CaptureIntentError(receipt: permissionReceipt())
+        }
+
         let approval = BridgeReceiptApproval(
             token: "local-intent-\(UUID().uuidString)",
             grantedBy: BridgeGrantedBy.localUserAction.rawValue)
@@ -57,6 +67,23 @@ struct CaptureScreenRegionIntent: AppIntent {
         return .result(
             value: path,
             dialog: "Saved the capture to \(path). It stays on this Mac until you share it.")
+    }
+
+    private func permissionReceipt() -> BridgeReceipt {
+        let now = Date()
+        return BridgeReceipt(
+            requestId: UUID().uuidString,
+            capability: ScreenCaptureRegionBridge.capabilityId,
+            outcome: .needsPermission,
+            permissionsUsed: [],
+            error: BridgeError(
+                code: "screen_recording_denied",
+                message: "Allow Eleven Views Tools in Privacy & Security → Screen & System Audio Recording, then run the capture again."),
+            startedAt: now,
+            completedAt: now,
+            host: BridgeHost(app: AppInfo.name,
+                             version: AppInfo.version,
+                             registryVersion: Bridge.registryVersion))
     }
 
     /// Builds a rect only when all four components are supplied and the size is

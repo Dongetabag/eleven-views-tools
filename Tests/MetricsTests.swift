@@ -11880,6 +11880,30 @@ struct MetricsTests {
                     ".opacity(options.selectedTool == .recording ? 1 : 0)"),
                "capture modes reserve the recording controls' height so the chooser never jumps")
 
+        let permissionsSource = (try? String(
+            contentsOfFile: "Sources/Vorssaint/Core/Permissions.swift",
+            encoding: .utf8)) ?? ""
+        let captureServiceSource = (try? String(
+            contentsOfFile: "Sources/Vorssaint/Services/QuickTools/ScreenCaptureService.swift",
+            encoding: .utf8)) ?? ""
+        expect(permissionsSource.contains("let granted = CGRequestScreenCaptureAccess()")
+                && permissionsSource.contains("if openSettingsWhenDenied")
+                && permissionsSource.contains("openScreenRecordingSettings()"),
+               "a denied or stale screen-capture grant opens the exact macOS recovery pane")
+        expect(captureServiceSource.contains(
+            "else if Permissions.shared.requestScreenRecording()")
+                && captureServiceSource.contains("self?.capture(initial: selected)"),
+               "granting Screen Recording resumes the capture the person already requested")
+
+        let captureIntentSource = (try? String(
+            contentsOfFile: "Sources/Vorssaint/Services/Bridge/CaptureScreenRegionIntent.swift",
+            encoding: .utf8)) ?? ""
+        expect(captureIntentSource.contains("CGPreflightScreenCaptureAccess()")
+                && captureIntentSource.contains(
+                    "Permissions.shared.requestScreenRecording()")
+                && captureIntentSource.contains("throw CaptureIntentError(receipt: permissionReceipt())"),
+               "the App Intent owns the native Screen Recording request and a readable denial")
+
         let cocoa = ScreenshotSupport.cocoaRect(fromWindowServer: CGRect(x: 10, y: 30, width: 200, height: 100),
                                                 mainScreenHeight: 900)
         expect(cocoa == CGRect(x: 10, y: 770, width: 200, height: 100),

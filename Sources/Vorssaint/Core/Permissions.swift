@@ -249,13 +249,21 @@ final class Permissions: ObservableObject {
     }
 
     /// Shows the system Screen Recording prompt (once per TCC reset) and
-    /// floats the guide card, like the Accessibility path.
-    func requestScreenRecording() {
-        CGRequestScreenCaptureAccess()
+    /// floats the guide card, like the Accessibility path. When macOS has
+    /// already recorded a denial, the prompt API returns immediately and
+    /// otherwise looks like a dead button. Open the exact Privacy pane in that
+    /// case so the person always has a visible recovery path.
+    @discardableResult
+    func requestScreenRecording(openSettingsWhenDenied: Bool = true) -> Bool {
+        let granted = CGRequestScreenCaptureAccess()
         refreshActivePermissions()
-        if !screenRecording {
+        if !granted {
             PermissionGuideOverlay.shared.show(for: .screenRecording)
+            if openSettingsWhenDenied {
+                openScreenRecordingSettings()
+            }
         }
+        return granted
     }
 
     func openAccessibilitySettings() {
