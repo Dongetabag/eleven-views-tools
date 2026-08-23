@@ -28,6 +28,23 @@
       ]
     },
     {
+      "id": "share.attachCaptureToDesk",
+      "title": "Attach capture to Desk issue",
+      "description": "After user approval, upload a local capture file to a scoped Desk issue via the attachments API and verify sha256 on the upload response.",
+      "kind": "app_intent",
+      "scope": "share",
+      "approvalRequired": true,
+      "feature": "screenshot",
+      "permissions": [],
+      "parameters": [
+        { "name": "companyId", "type": "string", "required": true },
+        { "name": "issueId", "type": "string", "required": true },
+        { "name": "localPath", "type": "string", "required": true },
+        { "name": "accessToken", "type": "string", "required": true },
+        { "name": "apiBaseURL", "type": "string", "required": false }
+      ]
+    },
+    {
       "id": "screen.captureFull",
       "title": "Capture full screen",
       "description": "Capture the full screen via the CommandBar screenshot action.",
