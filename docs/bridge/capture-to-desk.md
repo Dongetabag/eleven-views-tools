@@ -1,111 +1,107 @@
 # Capture-to-Desk vertical slice
 
-End-to-end path: **capture a screen region on the Mac → user approves via App Intent → upload to a scoped Desk issue → sha256 read-back on the upload response**.
+The first client-safe path is intentionally two visible actions:
+
+```text
+Capture Screen Region
+  → local owner-only PNG
+  → review or redact locally
+  → Attach File to Desk Issue
+  → native confirmation
+  → scoped upload
+  → content download + byte-count/SHA-256 verification
+  → receipt
+```
+
+Capture and external sharing remain separate until Eleven Views Tools has a
+foreground preview that can show the exact image and Desk destination before
+one combined approval.
 
 | Layer | Component |
 | --- | --- |
 | Capture | `screen.captureRegion` → `ScreenCaptureRegionBridge` |
-| Share | `share.attachCaptureToDesk` → `DeskAttachmentBridge` |
-| Shortcut | `CaptureToDeskIntent` ("Capture to Desk") |
-| Desk proof (agent) | `Tools/bridge/capture_to_desk_proof.py` |
-| Examples | [`share-attachCaptureToDesk.request.json`](examples/share-attachCaptureToDesk.request.json), [`share-attachCaptureToDesk.receipt.json`](examples/share-attachCaptureToDesk.receipt.json) |
+| Share | `share.attachToDeskIssue` → `AttachToDeskIssueBridge` |
+| Shortcuts | `CaptureScreenRegionIntent`, then `AttachToDeskIssueIntent` |
+| Desk proof | `Tools/bridge/desk_attachments_proof.py` |
+| Keychain setup | `Tools/bridge/configure_desk_bridge.sh` |
 
-## Desk-side proof (no Mac required)
+## Desk-side proof
 
-From any environment with Paperclip agent credentials:
+From a Desk agent run with scoped credentials:
 
 ```bash
-export PAPERCLIP_API_URL="https://desk.elevenviews.io"
-export PAPERCLIP_API_KEY="<scoped-run-jwt>"
-export PAPERCLIP_COMPANY_ID="<company-id>"
-export CAPTURE_TO_DESK_ISSUE_ID="<target-issue-id>"   # optional
-
-python3 Tools/bridge/capture_to_desk_proof.py
+python3 Tools/bridge/desk_attachments_proof.py
 ```
 
-Success prints `OK capture-to-desk proof <attachment-id>` and a JSON receipt with matching `sha256`.
+The proof uploads a deterministic PNG, checks the attachment metadata, downloads
+the stored content, and fails unless its SHA-256 still matches.
 
-## Mac E2E proof (M4 Max)
+## Mac setup
 
-### 1. Build developer variant
+### 1. Build the developer variant
 
 ```bash
 git clone https://github.com/Dongetabag/eleven-views-tools.git
 cd eleven-views-tools
 git checkout codex/eleven-views-tools-foundation
-
 ./build.sh --dev --install
 ```
 
-Developer build uses bundle id `io.elevenviews.tools.dev` so it coexists with the production app.
+The developer build uses `io.elevenviews.tools.dev`, so it can coexist with the
+release app.
 
-### 2. Grant permissions
+### 2. Grant Screen Recording
 
-Open **Eleven Views Tools (Developer)** once and approve Screen Recording when prompted (required for region capture).
+Open Eleven Views Tools (Developer), then grant Screen Recording when macOS asks.
 
-### 3. Scoped Desk token
+### 3. Pair one Desk company
 
-Use a short-lived scoped JWT for the **target issue** (same company + issue id you will attach to). Options:
+```bash
+Tools/bridge/configure_desk_bridge.sh configure
+```
 
-- Paperclip agent run on that issue (`PAPERCLIP_API_KEY` from a heartbeat)
-- Desk board UI if a user-scoped export exists for testing
+Enter the Desk company UUID. The final macOS Keychain prompt accepts the scoped
+Desk token without placing it in shell history, process arguments, a Shortcut,
+or an Application Support file. Bridge v1 supports one active company pairing.
 
-You need:
+### 4. Capture locally
 
-- `companyId` — Eleven Views company UUID
-- `issueId` — target issue UUID (e.g. [ELE-3156](https://desk.elevenviews.io/ELE/issues/ELE-3156))
-- `accessToken` — Bearer JWT with attachment write on that issue
-- `apiBaseURL` — `https://desk.elevenviews.io` (default)
+Run **Capture Screen Region** from Shortcuts or Spotlight. Confirm the native
+privacy prompt, select the region, then inspect or redact the saved PNG.
 
-### 4. Run the shortcut
+### 5. Attach after review
 
-**Spotlight / Shortcuts:** search **Capture to Desk** (Eleven Views Tools Developer).
+Run **Attach File to Desk Issue**. Supply:
 
-Parameters:
+- the Desk issue identifier, such as `ELE-3164`, or its UUID;
+- the reviewed local file path.
 
-| Field | Value |
-| --- | --- |
-| Desk company id | `<companyId>` |
-| Desk issue id | `<issueId>` |
-| Desk API token | `<accessToken>` |
-| Desk API base URL | `https://desk.elevenviews.io` |
+Confirm the native share prompt. Success is reported only after Desk returns the
+attachment and the app downloads it again to verify the exact byte count and
+SHA-256.
 
-Flow: select screen region → intent runs capture → uploads PNG → dialog shows attachment id.
+## Security boundaries
 
-### 5. Verify on Desk
+- Capture requires a fresh native confirmation before pixels are read.
+- Sharing requires a second native confirmation before bytes leave the Mac.
+- Release builds can contact only `https://desk.elevenviews.io` and refuse
+  cross-origin redirects.
+- The Desk token is stored in macOS Keychain.
+- Files are limited to 25 MB. Empty files, symlinks, and malformed issue IDs are
+  rejected.
+- Multipart filenames are sanitized before transmission.
+- Desk remains the only trusted signed caller for the share capability. The
+  proof harness is explicitly forbidden.
 
-Open the target issue on Desk. Confirm:
+## One-click workflow gate
 
-- New PNG attachment appears in the thread
-- File opens and matches the captured region
-- (Optional) Compare sha256 from bridge receipt dialog / logs with attachment metadata if exposed in UI
+A future **Capture to Desk** composite intent may combine these steps only after
+the app provides a foreground preview containing the exact capture, destination
+company, destination issue, and upload action. The preview must be followed by a
+fresh user confirmation. Tokens must never be App Intent parameters.
 
-### 6. Receipt expectations
+## Related work
 
-Successful `share.attachCaptureToDesk` receipt:
-
-- `outcome`: `success`
-- `artifacts[0].inlineDeskAttachment.attachmentId` — Desk attachment UUID
-- `artifacts[0].inlineDeskAttachment.sha256` — matches local file
-
-## Security notes
-
-- `share` scope always requires a local-user approval token (App Intent invocation counts).
-- Only `io.elevenviews.desk` is on the trusted caller list for `share.attachCaptureToDesk` (signed IPC path).
-- Tokens must be scoped to the destination issue; the bridge does not discover issues by itself.
-
-## Troubleshooting
-
-| Symptom | Likely cause |
-| --- | --- |
-| `needs_approval` on capture | Missing approval token (should not happen from App Intent) |
-| `desk_rejected` HTTP 401/403 | Token expired or wrong issue scope |
-| `sha_mismatch` | Desk response corrupt; re-run; file disk vs upload mismatch |
-| Empty capture file | Screen Recording permission not granted |
-| Shortcut missing | Rebuild with `--dev --install`; check Shortcuts app library |
-
-## Issues
-
-- Implementation: [ELE-3164](/ELE/issues/ELE-3164) (Atlas lane, merged [PR #8](https://github.com/Dongetabag/eleven-views-tools/pull/8))
-- Exit criteria parent: [ELE-3161](/ELE/issues/ELE-3161) (blocked on [ELE-3159](/ELE/issues/ELE-3159) board status)
-- Program: [ELE-3156](/ELE/issues/ELE-3156)
+- Desk lane: `ELE-3164`
+- Phase 1 exit criteria: `ELE-3161`
+- Program: `ELE-3156`

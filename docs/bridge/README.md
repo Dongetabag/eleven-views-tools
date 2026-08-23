@@ -27,11 +27,13 @@ and a destination preview.
 | `../../Tools/bridge/trusted-callers.v1.json` | Trusted-caller (signature) allowlist. |
 | `../../Tools/bridge/bridge_tool.py` | Registry generator + validator. |
 | `../../Tools/bridge/bridge_ipc_proof.py` | Signed-IPC decision-table proof. |
-| `../../Tools/bridge/capture_to_desk_proof.py` | Desk-side Capture-to-Desk upload + sha256 proof. |
-| `../../Tools/bridge/run-checks.sh` | Runs registry validate, IPC proof, optional desk proof when env set. |
+| `../../Tools/bridge/run-checks.sh` | Runs registry validation, IPC policy proof, and the optional live Desk proof. |
 | `../../Sources/Vorssaint/Services/Bridge/BridgeContract.swift` | Swift `Codable` mirror of the request / receipt schemas. |
 | `../../Sources/Vorssaint/Services/Bridge/ScreenCaptureRegionBridge.swift` | Handler for `screen.captureRegion`: captures a region, writes a local PNG, returns a receipt. |
-| `../../Sources/Vorssaint/Services/Bridge/CaptureScreenRegionIntent.swift` | The `screen.captureRegion` App Intent (Shortcuts / Spotlight entry point). |
+| `../../Sources/Vorssaint/Services/Bridge/AttachToDeskIssueBridge.swift` | Handler for `share.attachToDeskIssue`: Desk attachments upload + read-back verify. |
+| `../../Sources/Vorssaint/Services/Bridge/AttachToDeskIssueIntent.swift` | The `share.attachToDeskIssue` App Intent. |
+| `../../Tools/bridge/desk_attachments_proof.py` | Portable Desk attachments API proof (upload + SHA-256 read-back). |
+| `../../Tools/bridge/configure_desk_bridge.sh` | Interactive macOS Keychain setup/removal for the scoped Desk credential. |
 | `../../Sources/Vorssaint/Services/Bridge/SystemSnapshotBridge.swift` | Handler for `system.snapshot`: read-only CPU/mem/disk/network summary + receipt. |
 | `../../Sources/Vorssaint/Services/Bridge/SystemSnapshotIntent.swift` | The `system.snapshot` App Intent (Shortcuts / Spotlight entry point). |
 
@@ -40,9 +42,8 @@ and a destination preview.
 | Capability | Kind | Swift |
 | --- | --- | --- |
 | `screen.captureRegion` | `app_intent` | `CaptureScreenRegionIntent` → `ScreenCaptureRegionBridge` (ELE-3159) |
+| `share.attachToDeskIssue` | `app_intent` | `AttachToDeskIssueIntent` → `AttachToDeskIssueBridge` (ELE-3164) |
 | `system.snapshot` | `app_intent` | `SystemSnapshotIntent` → `SystemSnapshotBridge` (ELE-3158) |
-| `share.attachCaptureToDesk` | `app_intent` | `CaptureToDeskIntent` → `DeskAttachmentBridge` (ELE-3164) |
-
 See [capture-to-desk.md](capture-to-desk.md) for the Mac + Desk E2E proof runbook.
 
 `screen.captureRegion` returns the **local path** of the capture in its receipt
@@ -52,6 +53,28 @@ the capability is `approvalRequired`, the handler refuses with a
 `needs_approval` receipt (see
 [`examples/screen-captureRegion.needs-approval.receipt.json`](examples/screen-captureRegion.needs-approval.receipt.json))
 when no local-user approval token is supplied.
+
+`share.attachToDeskIssue` is deliberately separate from capture. The person can
+review or redact the local file, choose a scoped Desk issue, and then approve an
+Apple confirmation prompt before any bytes leave the Mac. The upload is limited
+to 25 MB, rejects symlinks, pins release traffic and same-origin redirects to
+`https://desk.elevenviews.io`, and downloads the stored attachment again to
+verify its byte count and SHA-256 before returning success.
+
+The release app reads its scoped Desk credential from macOS Keychain, never a
+Shortcut parameter or Application Support JSON file. Configure one company at
+a time from Terminal; the final `security` command prompts for the token so it
+does not enter shell history or the process list:
+
+```bash
+Tools/bridge/configure_desk_bridge.sh configure
+Tools/bridge/configure_desk_bridge.sh remove
+```
+
+Bridge v1 intentionally keeps capture and external sharing as two visible
+actions. A one-click Capture-to-Desk action must not ship until the app has a
+foreground preview that shows the exact image and Desk destination before the
+share approval.
 
 ## Lifecycle
 
@@ -105,10 +128,9 @@ python3 Tools/bridge/bridge_tool.py check       # fail if the committed file is 
 python3 Tools/bridge/bridge_tool.py validate    # schema-validate registry + examples
 ```
 
-Run `check` and `validate` in CI so the registry, schemas, and Swift can never
-silently drift. A ready-to-install GitHub Actions workflow (`bridge.yml`) is
-tracked as a follow-up because adding it needs a token with `workflow` scope;
-until then both commands run locally and in any pre-commit hook.
+GitHub Actions runs `check` and `validate` so the registry, schemas, and Swift
+cannot silently drift. `Tools/bridge/run-checks.sh` provides the same contract
+and policy checks locally.
 
 ## Security invariants
 

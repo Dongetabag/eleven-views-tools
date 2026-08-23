@@ -12,7 +12,7 @@
         "system.snapshot",
         "screen.captureRegion",
         "screen.captureFull",
-        "share.attachCaptureToDesk"
+        "share.attachToDeskIssue"
       ]
     },
     {

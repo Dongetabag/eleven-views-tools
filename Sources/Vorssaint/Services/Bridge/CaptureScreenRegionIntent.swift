@@ -30,6 +30,10 @@ struct CaptureScreenRegionIntent: AppIntent {
 
     @MainActor
     func perform() async throws -> some IntentResult & ReturnsValue<String> & ProvidesDialog {
+        // A Shortcut may run as an automation. Require visible confirmation
+        // before reading pixels rather than treating invocation as consent.
+        try await requestConfirmation()
+
         let approval = BridgeReceiptApproval(
             token: "local-intent-\(UUID().uuidString)",
             grantedBy: BridgeGrantedBy.localUserAction.rawValue)
@@ -97,9 +101,9 @@ struct ElevenViewsToolsAppShortcuts: AppShortcutsProvider {
             shortTitle: "System Snapshot",
             systemImageName: "gauge.with.dots.needle.33percent")
         AppShortcut(
-            intent: CaptureToDeskIntent(),
-            phrases: ["Capture to Desk with \(.applicationName)"],
-            shortTitle: "Capture to Desk",
+            intent: AttachToDeskIssueIntent(),
+            phrases: ["Attach a file to Desk with \(.applicationName)"],
+            shortTitle: "Attach to Desk",
             systemImageName: "paperclip")
     }
 }

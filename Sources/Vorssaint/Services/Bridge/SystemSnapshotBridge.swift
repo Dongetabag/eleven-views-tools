@@ -54,8 +54,11 @@ enum SystemSnapshotBridge {
         let metrics = await sampleMetrics()
         let artifact = BridgeArtifact(
             kind: .json,
+            path: nil,
             mimeType: "application/json",
-            inlineSnapshot: metrics,
+            bytes: nil,
+            sha256: nil,
+            inline: metrics,
             description: "Point-in-time system snapshot from the local SystemMonitor services.")
 
         return receipt(.success, artifacts: [artifact])
