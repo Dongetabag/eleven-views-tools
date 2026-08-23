@@ -83,7 +83,13 @@ enum DeskAttachmentBridge {
                                             to: uploadURL,
                                             token: input.accessToken,
                                             description: input.description)
-            guard uploaded.sha256 == localSha else {
+            guard let remoteSha = uploaded.sha256,
+                  let remoteBytes = uploaded.byteSize else {
+                return receipt(.failed,
+                               error: BridgeError(code: "invalid_response",
+                                                  message: "Desk upload response missing sha256 or byteSize."))
+            }
+            guard remoteSha == localSha else {
                 return receipt(.failed,
                                error: BridgeError(code: "sha_mismatch",
                                                   message: "Desk attachment sha256 did not match the local file."))
@@ -92,14 +98,14 @@ enum DeskAttachmentBridge {
             let inline = BridgeDeskAttachmentInline(
                 attachmentId: uploaded.id,
                 issueId: input.issueId,
-                sha256: uploaded.sha256,
-                byteSize: uploaded.byteSize,
+                sha256: remoteSha,
+                byteSize: remoteBytes,
                 contentPath: uploaded.contentPath)
             let artifact = BridgeArtifact(
                 kind: .json,
                 mimeType: "application/json",
-                sha256: uploaded.sha256,
-                bytes: uploaded.byteSize,
+                bytes: remoteBytes,
+                sha256: remoteSha,
                 inlineDeskAttachment: inline,
                 description: "Desk attachment with read-back sha256 verification.")
 
