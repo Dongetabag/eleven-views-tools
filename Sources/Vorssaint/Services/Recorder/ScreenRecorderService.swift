@@ -288,10 +288,12 @@ final class ScreenRecorderService: ObservableObject {
             Permissions.shared.requestScreenRecording()
             return false
         }
-        guard Permissions.shared.accessibility else {
-            Permissions.shared.requestAccessibility()
-            return false
-        }
+        // Accessibility only lets RecorderTypingSampler observe anonymous
+        // key-down timing in other apps for typing-aware automatic zooms. It
+        // is an optional enhancement, not a requirement for ScreenCaptureKit,
+        // pointer tracking, system audio, microphone audio, or writing the
+        // movie. Without the grant the sampler simply produces no global
+        // typing events and recording continues normally.
         guard RecorderSupport.canStart(freeBytes: RecorderTakeStore.shared.freeBytes()) else {
             reportNoSpace()
             return false

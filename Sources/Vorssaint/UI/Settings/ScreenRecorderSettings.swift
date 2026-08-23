@@ -58,9 +58,6 @@ struct ScreenRecordingCaptureSettings: View {
                 if !permissions.screenRecording {
                     PermissionRow(kind: .screenRecording)
                 }
-                if !permissions.accessibility {
-                    PermissionRow(kind: .accessibility)
-                }
             } header: {
                 Text(strings.pageTitle)
             }
