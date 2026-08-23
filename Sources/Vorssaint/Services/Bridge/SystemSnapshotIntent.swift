@@ -26,7 +26,7 @@ struct SystemSnapshotIntent: AppIntent {
 
         let receipt = await SystemSnapshotBridge.perform(input)
         guard receipt.outcome == .success,
-              let metrics = receipt.artifacts?.first?.inline else {
+              let metrics = receipt.artifacts?.first?.inlineSnapshot else {
             throw SystemSnapshotIntentError(receipt: receipt)
         }
 

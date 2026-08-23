@@ -15,4 +15,9 @@ python3 "$here/bridge_tool.py" validate
 echo "== signed-IPC decision-table proof =="
 python3 "$here/bridge_ipc_proof.py"
 
+if [[ -n "${PAPERCLIP_API_URL:-}" && -n "${PAPERCLIP_API_KEY:-}" && -n "${PAPERCLIP_COMPANY_ID:-}" ]]; then
+  echo "== capture-to-desk desk API proof =="
+  python3 "$here/capture_to_desk_proof.py"
+fi
+
 echo "All bridge checks passed."

@@ -73,9 +73,11 @@ struct BridgeReceiptApproval: Codable {
 }
 
 /// A structured error attached to a non-success receipt.
-struct BridgeError: Codable {
+struct BridgeError: Codable, Error, LocalizedError {
     var code: String
     var message: String
+
+    var errorDescription: String? { message }
 }
 
 /// One thing the action produced. File / image artifacts stay local until a
@@ -92,6 +94,15 @@ struct BridgeSystemSnapshotMetrics: Codable, Equatable {
     var networkDownBytesPerSec: Double
 }
 
+/// Inline payload for `share.attachCaptureToDesk` receipts.
+struct BridgeDeskAttachmentInline: Codable, Equatable {
+    var attachmentId: String
+    var issueId: String
+    var sha256: String
+    var byteSize: Int
+    var contentPath: String?
+}
+
 struct BridgeArtifact: Codable {
     enum Kind: String, Codable {
         case file, text, json, image
@@ -102,10 +113,66 @@ struct BridgeArtifact: Codable {
     var mimeType: String?
     var bytes: Int?
     var sha256: String?
-    /// Small json/text payloads (receipt schema `inline`). Currently used by
-    /// `system.snapshot`; other capabilities leave this nil.
-    var inline: BridgeSystemSnapshotMetrics?
+    var inlineSnapshot: BridgeSystemSnapshotMetrics?
+    var inlineDeskAttachment: BridgeDeskAttachmentInline?
     var description: String?
+
+    init(kind: Kind,
+         path: String? = nil,
+         mimeType: String? = nil,
+         bytes: Int? = nil,
+         sha256: String? = nil,
+         inlineSnapshot: BridgeSystemSnapshotMetrics? = nil,
+         inlineDeskAttachment: BridgeDeskAttachmentInline? = nil,
+         description: String? = nil) {
+        self.kind = kind
+        self.path = path
+        self.mimeType = mimeType
+        self.bytes = bytes
+        self.sha256 = sha256
+        self.inlineSnapshot = inlineSnapshot
+        self.inlineDeskAttachment = inlineDeskAttachment
+        self.description = description
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case kind, path, mimeType, bytes, sha256, inline, description
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(kind, forKey: .kind)
+        try container.encodeIfPresent(path, forKey: .path)
+        try container.encodeIfPresent(mimeType, forKey: .mimeType)
+        try container.encodeIfPresent(bytes, forKey: .bytes)
+        try container.encodeIfPresent(sha256, forKey: .sha256)
+        try container.encodeIfPresent(description, forKey: .description)
+        if let inlineSnapshot {
+            try container.encode(inlineSnapshot, forKey: .inline)
+        } else if let inlineDeskAttachment {
+            try container.encode(inlineDeskAttachment, forKey: .inline)
+        }
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        kind = try container.decode(Kind.self, forKey: .kind)
+        path = try container.decodeIfPresent(String.self, forKey: .path)
+        mimeType = try container.decodeIfPresent(String.self, forKey: .mimeType)
+        bytes = try container.decodeIfPresent(Int.self, forKey: .bytes)
+        sha256 = try container.decodeIfPresent(String.self, forKey: .sha256)
+        description = try container.decodeIfPresent(String.self, forKey: .description)
+        if let snapshot = try? container.decode(BridgeSystemSnapshotMetrics.self, forKey: .inline) {
+            inlineSnapshot = snapshot
+            inlineDeskAttachment = nil
+        } else if let desk = try? container.decode(BridgeDeskAttachmentInline.self, forKey: .inline) {
+            inlineDeskAttachment = desk
+            inlineSnapshot = nil
+        } else {
+            inlineSnapshot = nil
+            inlineDeskAttachment = nil
+        }
+    }
 }
 
 /// Identity of the app that produced the receipt.
