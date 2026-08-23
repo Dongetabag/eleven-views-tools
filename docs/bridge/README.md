@@ -27,6 +27,23 @@ and a destination preview.
 | `../../Tools/bridge/trusted-callers.v1.json` | Trusted-caller (signature) allowlist. |
 | `../../Tools/bridge/bridge_tool.py` | Registry generator + validator. |
 | `../../Tools/bridge/bridge_ipc_proof.py` | Signed-IPC decision-table proof. |
+| `../../Sources/Vorssaint/Services/Bridge/BridgeContract.swift` | Swift `Codable` mirror of the request / receipt schemas. |
+| `../../Sources/Vorssaint/Services/Bridge/ScreenCaptureRegionBridge.swift` | Handler for `screen.captureRegion`: captures a region, writes a local PNG, returns a receipt. |
+| `../../Sources/Vorssaint/Services/Bridge/CaptureScreenRegionIntent.swift` | The `screen.captureRegion` App Intent (Shortcuts / Spotlight entry point). |
+
+## Implemented capabilities
+
+| Capability | Kind | Swift |
+| --- | --- | --- |
+| `screen.captureRegion` | `app_intent` | `CaptureScreenRegionIntent` → `ScreenCaptureRegionBridge` (ELE-3159) |
+
+`screen.captureRegion` returns the **local path** of the capture in its receipt
+artifact and never moves the file off the Mac; a later `share`-scope capability
+with a destination preview is the only way a capture leaves the device. Because
+the capability is `approvalRequired`, the handler refuses with a
+`needs_approval` receipt (see
+[`examples/screen-captureRegion.needs-approval.receipt.json`](examples/screen-captureRegion.needs-approval.receipt.json))
+when no local-user approval token is supplied.
 
 ## Lifecycle
 
