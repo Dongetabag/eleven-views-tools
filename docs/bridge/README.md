@@ -27,8 +27,7 @@ and a destination preview.
 | `../../Tools/bridge/trusted-callers.v1.json` | Trusted-caller (signature) allowlist. |
 | `../../Tools/bridge/bridge_tool.py` | Registry generator + validator. |
 | `../../Tools/bridge/bridge_ipc_proof.py` | Signed-IPC decision-table proof. |
-| `../../Tools/bridge/capture_to_desk_proof.py` | Desk-side Capture-to-Desk upload + sha256 proof. |
-| `../../Tools/bridge/run-checks.sh` | Runs registry validate, IPC proof, optional desk proof when env set. |
+| `../../Tools/bridge/run-checks.sh` | Runs registry validation, IPC policy proof, and the optional live Desk proof. |
 | `../../Sources/Vorssaint/Services/Bridge/BridgeContract.swift` | Swift `Codable` mirror of the request / receipt schemas. |
 | `../../Sources/Vorssaint/Services/Bridge/ScreenCaptureRegionBridge.swift` | Handler for `screen.captureRegion`: captures a region, writes a local PNG, returns a receipt. |
 | `../../Sources/Vorssaint/Services/Bridge/AttachToDeskIssueBridge.swift` | Handler for `share.attachToDeskIssue`: Desk attachments upload + read-back verify. |
@@ -45,8 +44,6 @@ and a destination preview.
 | `screen.captureRegion` | `app_intent` | `CaptureScreenRegionIntent` → `ScreenCaptureRegionBridge` (ELE-3159) |
 | `share.attachToDeskIssue` | `app_intent` | `AttachToDeskIssueIntent` → `AttachToDeskIssueBridge` (ELE-3164) |
 | `system.snapshot` | `app_intent` | `SystemSnapshotIntent` → `SystemSnapshotBridge` (ELE-3158) |
-| `share.attachCaptureToDesk` | `app_intent` | `CaptureToDeskIntent` → `DeskAttachmentBridge` (ELE-3164) |
-
 See [capture-to-desk.md](capture-to-desk.md) for the Mac + Desk E2E proof runbook.
 
 `screen.captureRegion` returns the **local path** of the capture in its receipt
@@ -131,10 +128,9 @@ python3 Tools/bridge/bridge_tool.py check       # fail if the committed file is 
 python3 Tools/bridge/bridge_tool.py validate    # schema-validate registry + examples
 ```
 
-Run `check` and `validate` in CI so the registry, schemas, and Swift can never
-silently drift. A ready-to-install GitHub Actions workflow (`bridge.yml`) is
-tracked as a follow-up because adding it needs a token with `workflow` scope;
-until then both commands run locally and in any pre-commit hook.
+GitHub Actions runs `check` and `validate` so the registry, schemas, and Swift
+cannot silently drift. `Tools/bridge/run-checks.sh` provides the same contract
+and policy checks locally.
 
 ## Security invariants
 
