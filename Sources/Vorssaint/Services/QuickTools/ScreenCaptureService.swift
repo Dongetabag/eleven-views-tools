@@ -137,8 +137,15 @@ final class ScreenCaptureService: ObservableObject {
             // direct action keeps the native path when capture access is off.
             if selected == .color {
                 ColorSamplerService.shared.pickNative()
-            } else {
-                Permissions.shared.requestScreenRecording()
+            } else if Permissions.shared.requestScreenRecording() {
+                // CGRequestScreenCaptureAccess waits for the first system
+                // prompt. If the person grants access, honor the capture they
+                // already asked for instead of silently making them click a
+                // second time. The short hop lets the published TCC state
+                // refresh before re-entering this method.
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
+                    self?.capture(initial: selected)
+                }
             }
             return
         }
