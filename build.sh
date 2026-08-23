@@ -155,6 +155,7 @@ if (( TEST )); then
         Sources/Vorssaint/Services/Media/MediaSupport.swift \
         Sources/Vorssaint/Core/Defaults.swift \
         Sources/Vorssaint/Core/FeatureCatalog.swift \
+        Sources/Vorssaint/Core/FeatureProductPlacement.swift \
         Sources/Vorssaint/Core/FeaturePresets.swift \
         Sources/Vorssaint/Core/FeatureHubStrings.swift \
         Sources/Vorssaint/Core/ShortcutSettingsStrings.swift \

@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://elevenviews.io/schemas/story/flow-capture.v1.schema.json",
+  "title": "Tools FlowCapture v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "captureId", "version", "productContextRef", "workflowRef", "capturedAt", "display", "recordingAsset", "events", "privacy", "createdBy"],
+  "properties": {
+    "schema": { "const": "tools.flow-capture.v1" },
+    "captureId": { "$ref": "common.v1.schema.json#/$defs/identifier" },
+    "version": { "type": "string", "minLength": 1, "maxLength": 80 },
+    "productContextRef": { "$ref": "common.v1.schema.json#/$defs/identifier" },
+    "workflowRef": { "$ref": "common.v1.schema.json#/$defs/identifier" },
+    "capturedAt": { "$ref": "common.v1.schema.json#/$defs/timestamp" },
+    "display": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["width", "height", "scale"],
+      "properties": {
+        "width": { "type": "integer", "minimum": 1 },
+        "height": { "type": "integer", "minimum": 1 },
+        "scale": { "type": "number", "exclusiveMinimum": 0 },
+        "displayId": { "type": "string", "maxLength": 160 }
+      }
+    },
+    "applications": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["bundleId", "name"],
+        "properties": {
+          "bundleId": { "type": "string", "minLength": 1, "maxLength": 300 },
+          "name": { "type": "string", "minLength": 1, "maxLength": 200 },
+          "windowTitle": { "type": "string", "maxLength": 500 }
+        }
+      }
+    },
+    "recordingAsset": { "$ref": "common.v1.schema.json#/$defs/assetRef" },
+    "audioAssets": { "type": "array", "items": { "$ref": "common.v1.schema.json#/$defs/assetRef" } },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["eventId", "type", "timeMs"],
+        "properties": {
+          "eventId": { "$ref": "common.v1.schema.json#/$defs/identifier" },
+          "type": { "type": "string", "enum": ["pointer", "click", "keyboard-activity", "window-change", "scene-candidate", "ocr-snapshot"] },
+          "timeMs": { "type": "integer", "minimum": 0 },
+          "x": { "type": "number" },
+          "y": { "type": "number" },
+          "button": { "type": "string", "enum": ["primary", "secondary", "middle", "other"] },
+          "applicationBundleId": { "type": "string", "maxLength": 300 },
+          "windowTitle": { "type": "string", "maxLength": 500 },
+          "assetRef": { "$ref": "common.v1.schema.json#/$defs/identifier" },
+          "note": { "type": "string", "maxLength": 1000 }
+        }
+      }
+    },
+    "privacy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["classification", "reviewStatus"],
+      "properties": {
+        "classification": { "type": "string", "enum": ["public", "company", "client", "owner-only"] },
+        "reviewStatus": { "type": "string", "enum": ["pending", "passed", "findings", "blocked"] },
+        "findingRefs": { "type": "array", "items": { "$ref": "common.v1.schema.json#/$defs/identifier" }, "uniqueItems": true }
+      }
+    },
+    "createdBy": { "$ref": "common.v1.schema.json#/$defs/identifier" }
+  }
+}

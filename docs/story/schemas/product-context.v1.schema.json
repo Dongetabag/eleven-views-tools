@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://elevenviews.io/schemas/story/product-context.v1.schema.json",
+  "title": "Atlas Product Context v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "contextId", "version", "status", "scope", "product", "capabilities", "workflows", "sourceRefs", "verifiedAt"],
+  "properties": {
+    "schema": { "const": "atlas.product-context.v1" },
+    "contextId": { "$ref": "common.v1.schema.json#/$defs/identifier" },
+    "version": { "type": "string", "minLength": 1, "maxLength": 80 },
+    "status": { "type": "string", "enum": ["draft", "reviewed", "approved", "superseded"] },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["companyId", "productId"],
+      "properties": {
+        "companyId": { "$ref": "common.v1.schema.json#/$defs/identifier" },
+        "clientId": { "$ref": "common.v1.schema.json#/$defs/identifier" },
+        "productId": { "$ref": "common.v1.schema.json#/$defs/identifier" }
+      }
+    },
+    "product": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "description", "build", "releaseChannel"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "description": { "type": "string", "minLength": 1, "maxLength": 3000 },
+        "build": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "releaseChannel": { "type": "string", "enum": ["production", "beta", "internal", "development"] },
+        "releasedAt": { "$ref": "common.v1.schema.json#/$defs/timestamp" }
+      }
+    },
+    "capabilities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["capabilityId", "name", "description", "state", "sourceRefs"],
+        "properties": {
+          "capabilityId": { "$ref": "common.v1.schema.json#/$defs/identifier" },
+          "name": { "type": "string", "minLength": 1, "maxLength": 200 },
+          "description": { "type": "string", "minLength": 1, "maxLength": 2000 },
+          "state": { "type": "string", "enum": ["released", "beta", "internal", "building", "planned", "deprecated"] },
+          "claimRefs": { "type": "array", "items": { "$ref": "common.v1.schema.json#/$defs/identifier" }, "uniqueItems": true },
+          "proofRefs": { "type": "array", "items": { "$ref": "common.v1.schema.json#/$defs/identifier" }, "uniqueItems": true },
+          "sourceRefs": { "type": "array", "items": { "$ref": "common.v1.schema.json#/$defs/identifier" }, "minItems": 1, "uniqueItems": true }
+        }
+      },
+      "uniqueItems": true
+    },
+    "workflows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["workflowId", "name", "state", "steps", "sourceRefs"],
+        "properties": {
+          "workflowId": { "$ref": "common.v1.schema.json#/$defs/identifier" },
+          "name": { "type": "string", "minLength": 1, "maxLength": 240 },
+          "state": { "type": "string", "enum": ["released", "beta", "internal", "building", "planned", "deprecated"] },
+          "steps": { "type": "array", "items": { "type": "string", "minLength": 1, "maxLength": 500 }, "minItems": 1 },
+          "sourceRefs": { "type": "array", "items": { "$ref": "common.v1.schema.json#/$defs/identifier" }, "minItems": 1, "uniqueItems": true }
+        }
+      }
+    },
+    "claims": { "type": "array", "items": { "$ref": "common.v1.schema.json#/$defs/claim" } },
+    "proof": { "type": "array", "items": { "$ref": "common.v1.schema.json#/$defs/assetRef" } },
+    "sourceRefs": { "type": "array", "items": { "$ref": "common.v1.schema.json#/$defs/sourceRef" }, "minItems": 1 },
+    "verifiedAt": { "$ref": "common.v1.schema.json#/$defs/timestamp" },
+    "approvedBy": { "$ref": "common.v1.schema.json#/$defs/identifier" }
+  }
+}

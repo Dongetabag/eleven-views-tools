@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://elevenviews.io/schemas/story/story-plan.v1.schema.json",
+  "title": "Story Plan v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "planId", "version", "briefRef", "status", "title", "opening", "scenes", "outputs", "approval", "createdAt"],
+  "properties": {
+    "schema": { "const": "story.plan.v1" },
+    "planId": { "$ref": "common.v1.schema.json#/$defs/identifier" },
+    "version": { "type": "string", "minLength": 1, "maxLength": 80 },
+    "briefRef": { "$ref": "common.v1.schema.json#/$defs/identifier" },
+    "status": { "type": "string", "enum": ["draft", "ready-for-review", "approved", "rejected", "superseded"] },
+    "title": { "type": "string", "minLength": 1, "maxLength": 300 },
+    "opening": { "type": "string", "minLength": 1, "maxLength": 1500 },
+    "closing": { "type": "string", "maxLength": 1500 },
+    "scenes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["sceneId", "purpose", "show", "sourceRefs", "durationTargetSeconds"],
+        "properties": {
+          "sceneId": { "$ref": "common.v1.schema.json#/$defs/identifier" },
+          "purpose": { "type": "string", "minLength": 1, "maxLength": 1000 },
+          "show": { "type": "string", "minLength": 1, "maxLength": 1000 },
+          "narration": { "type": "string", "maxLength": 3000 },
+          "sourceRefs": { "type": "array", "items": { "$ref": "common.v1.schema.json#/$defs/identifier" }, "minItems": 1, "uniqueItems": true },
+          "claimRefs": { "type": "array", "items": { "$ref": "common.v1.schema.json#/$defs/identifier" }, "uniqueItems": true },
+          "durationTargetSeconds": { "type": "number", "exclusiveMinimum": 0, "maximum": 600 },
+          "next": { "$ref": "common.v1.schema.json#/$defs/identifier" }
+        }
+      }
+    },
+    "outputs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["outputId", "format", "aspectRatio"],
+        "properties": {
+          "outputId": { "$ref": "common.v1.schema.json#/$defs/identifier" },
+          "format": { "type": "string", "enum": ["video", "interactive", "gif", "guide", "website-visual"] },
+          "aspectRatio": { "type": "string", "enum": ["16:9", "9:16", "1:1", "4:5", "responsive"] },
+          "targetLengthSeconds": { "type": "integer", "minimum": 1, "maximum": 3600 }
+        }
+      }
+    },
+    "approval": { "$ref": "common.v1.schema.json#/$defs/approval" },
+    "createdAt": { "$ref": "common.v1.schema.json#/$defs/timestamp" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "status": { "const": "approved" } } },
+      "then": {
+        "properties": {
+          "approval": { "required": ["status", "approvedBy", "approvedAt", "approvalRef"], "properties": { "status": { "const": "approved" } } }
+        }
+      }
+    }
+  ]
+}

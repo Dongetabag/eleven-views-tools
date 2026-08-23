@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://elevenviews.io/schemas/story/common.v1.schema.json",
+  "title": "Eleven Views Story Common Types v1",
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "sourceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceId", "kind", "label", "observedAt", "confidence", "derivation"],
+      "properties": {
+        "sourceId": { "$ref": "#/$defs/identifier" },
+        "kind": {
+          "type": "string",
+          "enum": ["website", "document", "github", "desk", "atlas", "tools-capture", "figma", "drive", "human", "analytics", "other"]
+        },
+        "label": { "type": "string", "minLength": 1, "maxLength": 300 },
+        "uri": { "type": "string", "format": "uri" },
+        "observedAt": { "$ref": "#/$defs/timestamp" },
+        "confidence": { "type": "string", "enum": ["high", "medium", "low"] },
+        "derivation": { "type": "string", "enum": ["observed", "provided", "inferred"] },
+        "approvedBy": { "$ref": "#/$defs/identifier" },
+        "approvedAt": { "$ref": "#/$defs/timestamp" }
+      }
+    },
+    "claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["claimId", "text", "status", "sourceRefs"],
+      "properties": {
+        "claimId": { "$ref": "#/$defs/identifier" },
+        "text": { "type": "string", "minLength": 1, "maxLength": 2000 },
+        "status": { "type": "string", "enum": ["proposed", "approved", "rejected", "expired"] },
+        "evidenceRefs": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/identifier" },
+          "uniqueItems": true
+        },
+        "sourceRefs": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/identifier" },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "approvedBy": { "$ref": "#/$defs/identifier" },
+        "approvedAt": { "$ref": "#/$defs/timestamp" },
+        "expiresAt": { "$ref": "#/$defs/timestamp" }
+      }
+    },
+    "assetRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["assetId", "kind", "uri", "sha256", "bytes"],
+      "properties": {
+        "assetId": { "$ref": "#/$defs/identifier" },
+        "kind": {
+          "type": "string",
+          "enum": ["image", "video", "audio", "document", "capture", "waveform", "subtitle", "other"]
+        },
+        "uri": { "type": "string", "format": "uri" },
+        "sha256": { "type": "string", "pattern": "^[a-fA-F0-9]{64}$" },
+        "bytes": { "type": "integer", "minimum": 1 },
+        "mediaType": { "type": "string", "maxLength": 160 },
+        "privacy": { "type": "string", "enum": ["public", "company", "client", "owner-only"] }
+      }
+    },
+    "approval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status"],
+      "properties": {
+        "status": { "type": "string", "enum": ["pending", "approved", "rejected", "invalidated"] },
+        "approvedBy": { "$ref": "#/$defs/identifier" },
+        "approvedAt": { "$ref": "#/$defs/timestamp" },
+        "approvalRef": { "$ref": "#/$defs/identifier" },
+        "note": { "type": "string", "maxLength": 1000 }
+      }
+    }
+  }
+}

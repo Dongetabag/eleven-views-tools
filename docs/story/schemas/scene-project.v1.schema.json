@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://elevenviews.io/schemas/story/scene-project.v1.schema.json",
+  "title": "Story Scene Project v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "projectId", "version", "state", "storyContextRef", "productContextRef", "briefRef", "planRef", "sourceRefs", "scenes", "outputs", "approval", "createdAt", "updatedAt"],
+  "properties": {
+    "schema": { "const": "story.scene-project.v1" },
+    "projectId": { "$ref": "common.v1.schema.json#/$defs/identifier" },
+    "version": { "type": "string", "minLength": 1, "maxLength": 80 },
+    "state": {
+      "type": "string",
+      "enum": ["context-resolved", "brief-ready", "plan-ready", "plan-approved", "assets-ready", "scenes-ready", "audio-ready", "qa-ready", "review-ready", "approved", "rendered", "published", "monitoring"]
+    },
+    "storyContextRef": { "$ref": "common.v1.schema.json#/$defs/identifier" },
+    "productContextRef": { "$ref": "common.v1.schema.json#/$defs/identifier" },
+    "presenterProfileRef": { "$ref": "common.v1.schema.json#/$defs/identifier" },
+    "briefRef": { "$ref": "common.v1.schema.json#/$defs/identifier" },
+    "planRef": { "$ref": "common.v1.schema.json#/$defs/identifier" },
+    "sourceRefs": { "type": "array", "items": { "$ref": "common.v1.schema.json#/$defs/identifier" }, "minItems": 1, "uniqueItems": true },
+    "scenes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["sceneId", "order", "purpose", "source", "visual", "narration", "captions", "durationMs"],
+        "properties": {
+          "sceneId": { "$ref": "common.v1.schema.json#/$defs/identifier" },
+          "order": { "type": "integer", "minimum": 1 },
+          "purpose": { "type": "string", "minLength": 1, "maxLength": 1000 },
+          "source": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["assetRef", "startMs", "endMs"],
+            "properties": {
+              "assetRef": { "$ref": "common.v1.schema.json#/$defs/identifier" },
+              "startMs": { "type": "integer", "minimum": 0 },
+              "endMs": { "type": "integer", "minimum": 1 }
+            }
+          },
+          "visual": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["layout", "focus", "presenterVisibility"],
+            "properties": {
+              "layout": { "type": "string", "enum": ["product-full", "product-framed", "split", "title", "custom"] },
+              "focus": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["mode"],
+                "properties": {
+                  "mode": { "type": "string", "enum": ["none", "automatic", "manual"] },
+                  "x": { "type": "number" },
+                  "y": { "type": "number" },
+                  "width": { "type": "number", "exclusiveMinimum": 0 },
+                  "height": { "type": "number", "exclusiveMinimum": 0 },
+                  "zoom": { "type": "number", "minimum": 1, "maximum": 5 }
+                }
+              },
+              "presenterVisibility": { "type": "string", "enum": ["auto", "always", "never", "narration-only"] }
+            }
+          },
+          "interaction": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "type": { "type": "string", "enum": ["none", "hotspot", "continue", "branch", "cta"] },
+              "label": { "type": "string", "maxLength": 300 },
+              "nextSceneRef": { "$ref": "common.v1.schema.json#/$defs/identifier" }
+            }
+          },
+          "narration": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["text", "source"],
+            "properties": {
+              "text": { "type": "string", "maxLength": 5000 },
+              "source": { "type": "string", "enum": ["none", "recorded", "uploaded", "elevenlabs"] },
+              "audioAssetRef": { "$ref": "common.v1.schema.json#/$defs/identifier" },
+              "waveformAssetRef": { "$ref": "common.v1.schema.json#/$defs/identifier" },
+              "scriptVersion": { "type": "string", "maxLength": 80 }
+            }
+          },
+          "captions": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["enabled"],
+            "properties": {
+              "enabled": { "type": "boolean" },
+              "assetRef": { "$ref": "common.v1.schema.json#/$defs/identifier" },
+              "style": { "type": "string", "maxLength": 120 }
+            }
+          },
+          "soundPreset": { "type": "string", "maxLength": 120 },
+          "durationMs": { "type": "integer", "minimum": 1 }
+        }
+      }
+    },
+    "outputs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["outputId", "kind", "aspectRatio", "status"],
+        "properties": {
+          "outputId": { "$ref": "common.v1.schema.json#/$defs/identifier" },
+          "kind": { "type": "string", "enum": ["video", "interactive", "gif", "guide", "website-visual"] },
+          "aspectRatio": { "type": "string", "enum": ["16:9", "9:16", "1:1", "4:5", "responsive"] },
+          "status": { "type": "string", "enum": ["planned", "rendering", "ready", "failed", "published"] },
+          "assetRef": { "$ref": "common.v1.schema.json#/$defs/identifier" }
+        }
+      },
+      "minItems": 1
+    },
+    "qaReceiptRef": { "$ref": "common.v1.schema.json#/$defs/identifier" },
+    "renderReceiptRefs": { "type": "array", "items": { "$ref": "common.v1.schema.json#/$defs/identifier" }, "uniqueItems": true },
+    "publishReceiptRef": { "$ref": "common.v1.schema.json#/$defs/identifier" },
+    "approval": { "$ref": "common.v1.schema.json#/$defs/approval" },
+    "createdAt": { "$ref": "common.v1.schema.json#/$defs/timestamp" },
+    "updatedAt": { "$ref": "common.v1.schema.json#/$defs/timestamp" }
+  }
+}

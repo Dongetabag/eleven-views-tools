@@ -1,0 +1,19 @@
+{
+  "schema": "story.brief.v1",
+  "briefId": "brief.capture-to-desk-demo",
+  "version": "1.0.0",
+  "status": "ready",
+  "storyContextRef": "story-context.eleven-views.desk",
+  "productContextRef": "product-context.desk.2026-08-23",
+  "goal": "Explain why verified evidence matters when agents act on a Mac.",
+  "audienceRef": "audience.agency-owner",
+  "formats": ["product-video", "short"],
+  "channels": ["website", "linkedin"],
+  "targetLengthSeconds": 55,
+  "cta": "See Desk in action",
+  "presenterProfileRef": "presenter.simeon-founder",
+  "sourceRefs": ["flow-capture.capture-to-desk.001"],
+  "constraints": ["Use actual Desk and Tools interfaces", "Do not expose client data"],
+  "requestedBy": "simeon-reid",
+  "createdAt": "2026-08-23T20:00:00Z"
+}
