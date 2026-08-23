@@ -21,8 +21,12 @@ and a destination preview.
 | [`schemas/bridge-receipt.v1.schema.json`](schemas/bridge-receipt.v1.schema.json) | Shape of the receipt returned for every request. |
 | [`capability-registry.v1.json`](capability-registry.v1.json) | **Generated** allowlist of capabilities. Do not hand-edit. |
 | [`examples/`](examples/) | Worked request + receipt pairs. |
-| `../../Tools/bridge/manifest.json` | Curated source of truth for the allowlist. |
-| `../../Tools/bridge/bridge_tool.py` | Generator + validator. |
+| [`signed-ipc.md`](signed-ipc.md) | The signed XPC transport + trusted-caller allowlist (ELE-3160). |
+| [`schemas/trusted-callers.v1.schema.json`](schemas/trusted-callers.v1.schema.json) | Shape of the trusted-callers allowlist. |
+| `../../Tools/bridge/manifest.json` | Curated source of truth for the capability allowlist. |
+| `../../Tools/bridge/trusted-callers.v1.json` | Trusted-caller (signature) allowlist. |
+| `../../Tools/bridge/bridge_tool.py` | Registry generator + validator. |
+| `../../Tools/bridge/bridge_ipc_proof.py` | Signed-IPC decision-table proof. |
 
 ## Lifecycle
 
@@ -89,7 +93,9 @@ until then both commands run locally and in any pre-commit hook.
 3. `approvalRequired` capabilities need a fresh local-user token.
 4. Artifacts stay on the Mac; moving them off-device is a separate, approved
    `share`-scope capability with a destination preview.
-5. Caller identity is verified by the signed IPC layer ([ELE-3160]).
+5. Caller identity is verified by the [signed IPC layer](signed-ipc.md)
+   (ELE-3160): the peer's code signature is validated from its audit token and
+   matched against the trusted-callers allowlist before any capability check.
 
 ## Versioning
 

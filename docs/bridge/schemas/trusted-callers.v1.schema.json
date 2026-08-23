@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://elevenviews.io/schemas/bridge/trusted-callers.v1.schema.json",
+  "title": "ElevenViewsBridge Trusted Callers v1",
+  "description": "The who allowlist for the signed IPC layer (ELE-3160). Only a connection whose verified code signature matches one of these entries is accepted. Identity is read from the peer's audit token, never from the request body.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "policyVersion", "requireExplicitAllowlist", "callers"],
+  "properties": {
+    "schema": { "const": "elevenviews.bridge.trusted-callers.v1" },
+    "policyVersion": { "type": "integer", "minimum": 1 },
+    "requireExplicitAllowlist": {
+      "type": "boolean",
+      "description": "When true, a caller must appear in `callers` even if its signature satisfies the platform designated requirement."
+    },
+    "callers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "name", "teamId", "signingIdentifier"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "teamId": { "type": "string", "description": "Apple Developer Team ID the caller must be signed with." },
+          "signingIdentifier": { "type": "string", "description": "Exact code-signing identifier the caller must present." },
+          "allowedCapabilities": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Capability ids this caller may invoke; omitted/empty means any registry capability (still subject to scope + approval)."
+          }
+        }
+      }
+    }
+  }
+}
