@@ -16105,6 +16105,70 @@ struct MetricsTests {
                "a container an earlier version left world readable is tightened on the next write")
         try? FileManager.default.removeItem(at: privateRoot)
 
+        // MARK: ElevenViewsBridge receipt contract (system.snapshot)
+
+        expectClose(SystemSnapshotPayload.cpuLoadPercent(fromFraction: 0.184), 18.4,
+                    "cpu fraction rounds to one-decimal percent")
+        expectClose(SystemSnapshotPayload.cpuLoadPercent(fromFraction: 1.5), 100.0,
+                    "cpu fraction clamps above 1.0")
+        expectClose(SystemSnapshotPayload.cpuLoadPercent(fromFraction: -0.2), 0.0,
+                    "cpu fraction clamps below 0")
+        expectEqual(Bridge.Outcome.needsPermission.rawValue, "needs_permission",
+                    "outcome raw values match the receipt schema enum")
+        expectEqual(Bridge.Outcome.needsApproval.rawValue, "needs_approval",
+                    "approval-needed outcome uses the schema spelling")
+
+        let snapshotPayload = SystemSnapshotPayload(cpuLoadPercent: 18.4,
+                                                    memoryUsedBytes: 12_884_901_888,
+                                                    memoryTotalBytes: 34_359_738_368,
+                                                    diskFreeBytes: 210_453_397_504,
+                                                    diskTotalBytes: 494_384_795_648,
+                                                    networkUpBytesPerSec: 10_240,
+                                                    networkDownBytesPerSec: 512_000)
+        let fixedStart = BridgeDateFormat.date(from: "2026-08-23T16:20:00Z") ?? Date(timeIntervalSince1970: 0)
+        let sampleReceipt = BridgeReceipt(
+            receiptId: UUID(uuidString: "b7e6d2a1-0c44-4f0b-8e21-9a3f4c6d7e88")!,
+            requestId: UUID(uuidString: "3f2a9c14-6b1e-4a1c-9d8e-2b7c5a0f1e33")!,
+            capability: Bridge.Capability.systemSnapshot,
+            outcome: .success,
+            artifacts: [BridgeArtifact(kind: .json,
+                                       mimeType: "application/json",
+                                       inline: snapshotPayload,
+                                       description: "Point-in-time system snapshot.")],
+            permissionsUsed: [],
+            startedAt: fixedStart,
+            completedAt: fixedStart,
+            host: BridgeHost(app: "Eleven Views Tools", version: "1.0.0", registryVersion: 1))
+
+        if let encoded = try? sampleReceipt.jsonString() {
+            expect(encoded.contains("\"schema\":\"elevenviews.bridge.receipt.v1\""),
+                   "receipt encodes its v1 schema tag")
+            expect(encoded.contains("\"capability\":\"system.snapshot\""),
+                   "receipt encodes the capability id")
+            expect(encoded.contains("\"outcome\":\"success\""),
+                   "receipt encodes the outcome")
+            expect(encoded.contains("\"cpuLoadPercent\":18.4"),
+                   "inline snapshot keeps the cpu percentage")
+            expect(encoded.contains("\"startedAt\":\"2026-08-23T16:20:00Z\""),
+                   "timestamps encode as UTC ISO-8601")
+            expect(encoded.contains("\"approval\":null") && encoded.contains("\"error\":null"),
+                   "absent approval/error encode as explicit null")
+            // Round-trips back to an equal value.
+            if let data = encoded.data(using: .utf8),
+               let decoded = try? JSONDecoder().decode(BridgeReceipt.self, from: data) {
+                expect(decoded == sampleReceipt, "receipt survives an encode/decode round-trip")
+                expect(decoded.artifacts.first?.inline == snapshotPayload,
+                       "inline snapshot payload survives the round-trip")
+            } else {
+                expect(false, "receipt JSON decodes back into a BridgeReceipt")
+            }
+        } else {
+            expect(false, "receipt encodes to JSON")
+        }
+
+        expectEqual(snapshotPayload.summaryLine, "CPU 18.4% · memory 38% used",
+                    "snapshot summary line reads cleanly")
+
         // MARK: Result
 
         if failures.isEmpty {

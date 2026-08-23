@@ -81,6 +81,33 @@ silently drift. A ready-to-install GitHub Actions workflow (`bridge.yml`) is
 tracked as a follow-up because adding it needs a token with `workflow` scope;
 until then both commands run locally and in any pre-commit hook.
 
+## Implemented capabilities
+
+| Capability | Kind | Backing code |
+| --- | --- | --- |
+| [`system.snapshot`](capability-registry.v1.json) | `app_intent` | `Sources/Vorssaint/Services/Bridge/` |
+
+`system.snapshot` is the first live capability. It is read-only, needs no macOS
+permission, and nothing leaves the Mac:
+
+- `SystemSnapshotIntent` — the App Intent entry point (Shortcuts / same-process).
+- `SystemSnapshotReader` — one-shot CPU / memory / disk / network read built on
+  the same primitives `SystemMonitor` samples, independent of the panel's
+  UI-driven lifecycle so a caller needs no window open.
+- `BridgeReceipt` — pure-Foundation v1 receipt/payload models. The intent
+  returns a `bridge-receipt.v1` whose single inline JSON artifact is the
+  snapshot in [`examples/system-snapshot.receipt.json`](examples/system-snapshot.receipt.json).
+
+The receipt models compile in the standalone test harness (`./build.sh --test`
+covers encode/decode + schema-shape assertions), and
+`Tools/bridge/check_receipt_contract.py` guards the Swift payload against the
+committed example on any machine (no Swift toolchain required) — run it in CI
+next to `bridge_tool.py check` / `validate`.
+
+The signed cross-process IPC that verifies a `caller` and enforces approval
+tokens is a separate concern ([ELE-3160]); `system.snapshot` requires neither,
+so it ships on its own.
+
 ## Security invariants
 
 1. Allowlist only — unknown capabilities are rejected.
