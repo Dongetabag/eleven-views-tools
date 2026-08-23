@@ -1,0 +1,22 @@
+{
+  "schema": "elevenviews.bridge.request.v1",
+  "requestId": "9c0b3d55-2e77-4b90-a1f2-6d4e8b2c1a09",
+  "capability": "screen.captureRegion",
+  "scope": "capture",
+  "parameters": {
+    "rect": { "x": 120, "y": 80, "width": 640, "height": 400 }
+  },
+  "caller": {
+    "id": "io.elevenviews.desk",
+    "name": "Eleven Views Desk",
+    "teamId": "EV11VIEWS00",
+    "signingIdentifier": "io.elevenviews.desk"
+  },
+  "approval": {
+    "token": "appr_2f8c1d7a9e",
+    "grantedBy": "local-user-action",
+    "grantedAt": "2026-08-23T16:24:58Z",
+    "expiresAt": "2026-08-23T16:29:58Z"
+  },
+  "requestedAt": "2026-08-23T16:25:00Z"
+}

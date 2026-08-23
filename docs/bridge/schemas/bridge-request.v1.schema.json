@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://elevenviews.io/schemas/bridge/bridge-request.v1.schema.json",
+  "title": "ElevenViewsBridge Request v1",
+  "description": "A single action request handed to the ElevenViews Tools bridge over the local IPC channel. The capability must exist in the capability registry; the bridge re-validates scope, caller and approval before running.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "requestId", "capability", "scope", "caller", "requestedAt"],
+  "properties": {
+    "schema": { "const": "elevenviews.bridge.request.v1" },
+    "requestId": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Client-generated idempotency key echoed back on the receipt."
+    },
+    "capability": {
+      "type": "string",
+      "pattern": "^[a-z][a-zA-Z0-9]*(\\.[a-z][a-zA-Z0-9]*)+$",
+      "description": "Registry capability id the caller wants to run."
+    },
+    "scope": {
+      "type": "string",
+      "enum": ["read", "capture", "share", "run", "system"],
+      "description": "Must match the registry scope for the capability."
+    },
+    "parameters": {
+      "type": "object",
+      "description": "Capability-specific arguments, validated against the capability's parameter list.",
+      "additionalProperties": true
+    },
+    "caller": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name"],
+      "description": "Who is asking. The signed IPC layer (ELE-3160) verifies these against the connecting process.",
+      "properties": {
+        "id": { "type": "string", "description": "Stable caller id, e.g. bundle id or service name." },
+        "name": { "type": "string" },
+        "teamId": { "type": "string", "description": "Apple Developer Team ID of the caller, when code-signed." },
+        "signingIdentifier": { "type": "string", "description": "Code signing identifier the bridge validated." }
+      }
+    },
+    "approval": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["token", "grantedAt"],
+          "description": "Local user approval token, required when the capability sets approvalRequired.",
+          "properties": {
+            "token": { "type": "string" },
+            "grantedBy": { "type": "string", "enum": ["local-user-action", "policy"] },
+            "grantedAt": { "type": "string", "format": "date-time" },
+            "expiresAt": { "type": "string", "format": "date-time" }
+          }
+        }
+      ]
+    },
+    "requestedAt": { "type": "string", "format": "date-time" }
+  }
+}

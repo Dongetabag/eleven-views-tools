@@ -1,0 +1,33 @@
+{
+  "schema": "elevenviews.bridge.receipt.v1",
+  "receiptId": "b7e6d2a1-0c44-4f0b-8e21-9a3f4c6d7e88",
+  "requestId": "3f2a9c14-6b1e-4a1c-9d8e-2b7c5a0f1e33",
+  "capability": "system.snapshot",
+  "outcome": "success",
+  "artifacts": [
+    {
+      "kind": "json",
+      "mimeType": "application/json",
+      "inline": {
+        "cpuLoadPercent": 18.4,
+        "memoryUsedBytes": 12884901888,
+        "memoryTotalBytes": 34359738368,
+        "diskFreeBytes": 210453397504,
+        "diskTotalBytes": 494384795648,
+        "networkUpBytesPerSec": 10240,
+        "networkDownBytesPerSec": 512000
+      },
+      "description": "Point-in-time system snapshot from the local SystemMonitor services."
+    }
+  ],
+  "permissionsUsed": [],
+  "approval": null,
+  "error": null,
+  "startedAt": "2026-08-23T16:20:00Z",
+  "completedAt": "2026-08-23T16:20:00Z",
+  "host": {
+    "app": "Eleven Views Tools",
+    "version": "1.0.0",
+    "registryVersion": 1
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "registryVersion": 1,
+  "app": {
+    "bundleId": "io.elevenviews.tools",
+    "name": "Eleven Views Tools"
+  },
+  "capabilities": [
+    {
+      "id": "system.snapshot",
+      "title": "System snapshot",
+      "description": "Read-only CPU / memory / disk / network summary from the local SystemMonitor services. No permission required; nothing leaves the Mac.",
+      "kind": "app_intent",
+      "scope": "read",
+      "approvalRequired": false,
+      "feature": "monitorCPU",
+      "permissions": []
+    },
+    {
+      "id": "screen.captureRegion",
+      "title": "Capture screen region",
+      "description": "Capture a user-selected screen region via the Screenshot service and return a local file path. Any transfer off the Mac requires a separate, user-approved share step.",
+      "kind": "app_intent",
+      "scope": "capture",
+      "approvalRequired": true,
+      "feature": "screenshot",
+      "parameters": [
+        { "name": "rect", "type": "rect", "required": false, "description": "Optional capture rect; omitted means interactive selection." }
+      ]
+    },
+    {
+      "id": "screen.captureFull",
+      "title": "Capture full screen",
+      "description": "Capture the full screen via the CommandBar screenshot action.",
+      "kind": "command_bar_action",
+      "scope": "capture",
+      "approvalRequired": true,
+      "feature": "screenshot",
+      "commandBarActionId": "action.screenshot"
+    },
+    {
+      "id": "power.keepAwake",
+      "title": "Keep awake",
+      "description": "Toggle keep-awake, or pass minutes to keep awake for a fixed duration.",
+      "kind": "command_bar_action",
+      "scope": "run",
+      "approvalRequired": false,
+      "feature": "keepAwake",
+      "commandBarActionId": "action.keepAwake",
+      "permissions": [],
+      "parameters": [
+        { "name": "minutes", "type": "integer", "required": false, "min": 1, "max": 480, "description": "Optional duration; omitted toggles the current state." }
+      ]
+    },
+    {
+      "id": "display.toggleDarkMode",
+      "title": "Toggle dark mode",
+      "description": "Switch the system appearance between light and dark via the CommandBar quick toggle.",
+      "kind": "command_bar_action",
+      "scope": "run",
+      "approvalRequired": false,
+      "feature": "quickToggles",
+      "commandBarActionId": "action.darkMode",
+      "permissions": []
+    }
+  ]
+}
