@@ -26,12 +26,9 @@ enum Shell {
 
 /// Runs a command with administrator privileges (system password prompt).
 enum AdminShell {
-    // Eleven Views Tools is a menu-bar agent (LSUIElement), so it is rarely the active
-    // app. SecurityAgent attaches its password dialog to the requesting process;
-    // when that process is an inactive agent the dialog can open behind the
-    // frontmost app and read as "no prompt appeared". Bringing the app forward
-    // first — exactly what onboarding and the Dock Preview intro already do for
-    // their own windows — makes the dialog surface in focus.
+    // SecurityAgent attaches its password dialog to the requesting process.
+    // Bringing the app forward first keeps that dialog focused even when a
+    // command started from the menu-bar companion while another app was active.
     //
     // `prompting` serializes the request: a second one while a dialog is already
     // up returns false instead of stacking another SecurityAgent dialog (what a

@@ -36,7 +36,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate, NSW
     // MARK: - Lifecycle
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        NSApp.setActivationPolicy(.accessory)
+        // Eleven Views Tools is a full Mac app. Keep it visible in the Dock and
+        // Command-Tab even when its windows are closed; the menu-bar controls
+        // remain available as a companion surface.
+        NSApp.setActivationPolicy(.regular)
         // Before any window exists, so nothing is ever built with the wrong
         // appearance and then repainted.
         AppAppearanceController.shared.apply()
@@ -69,9 +72,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate, NSW
         // about which displays are attached.
         BrightnessService.shared.restoreDisplaysLeftOff()
 
-        // An accessory (LSUIElement) app gets no default main menu, so the standard
-        // keyboard shortcuts (Cmd+H/M/W/Q and the Edit shortcuts Cmd+C/V/X/A) have
-        // no menu items to fire and do nothing in the Settings window. Install one.
+        // Install an explicit native menu so the app's commands and standard
+        // keyboard shortcuts remain consistent from every window.
         installMainMenu()
         PanelLayout.resetCollapsedSectionsOnce(for: "2.15.1")
 
@@ -170,7 +172,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate, NSW
                 defaults.set(OnboardingInfo.currentFeatureSet, forKey: DefaultsKey.featuresOnboardingVersion)
                 defaults.set(AppInfo.version, forKey: DefaultsKey.lastUpdateIntroVersion)
                 guard !skipStartupWindows else { return }
-                self.presentUpdateIntros()
+                if !self.presentUpdateIntros() {
+                    self.openSettingsWindow()
+                }
             }
         }
     }
@@ -250,40 +254,16 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate, NSW
         KeepAwakeManager.shared.deactivate(reason: .quit)
     }
 
-    /// The lifeline when the menu bar icon goes missing. Opening the app again
-    /// from Finder, Spotlight or Launchpad while it's already running lands here:
-    /// force the icon back and pop the panel so there's immediate proof the app is
-    /// alive. Without this, a hidden icon would strand the app running with no way
-    /// in. (A cold launch can't happen while running, so this is the recovery path.)
+    /// Opening the Dock icon, Finder item, Spotlight result or Launchpad entry
+    /// while the app is already running always restores its full Tools window.
+    /// The menu-bar item remains available as a compact companion surface.
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
         guard !flag else { return true }
-        // A deliberate reopen with no windows showing is the user's recovery action.
-        // Rebuild the menu bar item only when it is actually missing: the
-        // pre-rebuild item has a settled frame, so iconIsOnScreen() is trustworthy
-        // here (the not-ready-frame caveat below only applies to a freshly created
-        // item), and a dropped icon reads off-screen/zero, so recovery still gets
-        // its rebuild with fresh placement. A healthy icon is left alone: on
-        // macOS 27 a rebuilt item's window can keep reporting the slot it was
-        // born in (the far right of the status area) while the icon draws at the
-        // user's arranged spot, and that mismatch strands the panel against the
-        // screen edge and survives relaunches.
         if !iconIsOnScreen() {
             statusController?.recreateStatusItem(resetPlacement: true)
         }
-        // Decide on the next run-loop turn: a freshly rebuilt status item has no
-        // laid-out on-screen frame yet this turn, so iconIsOnScreen() would read a
-        // not-ready frame and wrongly skip the panel. After layout: pop the panel
-        // when the icon is genuinely on screen, else fall back to the Settings
-        // window. Either way the user ALWAYS gets back in.
         DispatchQueue.main.async { [weak self] in
-            guard let self else { return }
-            if self.iconIsOnScreen(), !self.popover.isShown {
-                self.popoverClosedAt = .distantPast
-                self.togglePopover()
-            }
-            if !self.popover.isShown {
-                self.openSettingsWindow()
-            }
+            self?.openSettingsWindow()
         }
         return true
     }
@@ -825,9 +805,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate, NSW
     }
 
     /// The app update list can only hand a store purchase over to the App
-    /// Store. With no Dock icon there is no way back to the window that sent
-    /// the person there, so returning brings it forward again, on the page
-    /// they left, with the list already reading the truth.
+    /// Store. Returning brings its source window forward again, on the page
+    /// the person left, with the list already reading the truth.
     private func restoreAfterAppStoreHandoff() {
         guard AppFeature.appUpdates.isAvailable else { return }
         let service = AppUpdatesService.shared
@@ -1406,10 +1385,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate, NSW
 
     /// On launch after an update, keep the short support prompt visible once per
     /// version. The changelog itself is already shown before download.
-    private func presentUpdateIntros() {
-        if showUpdateHighlightsIfNeeded() { return }
-        if showSupportUpdateIntroIfNeeded() { return }
-        if showUpdateShowcaseIntroIfNeeded() { return }
+    @discardableResult
+    private func presentUpdateIntros() -> Bool {
+        if showUpdateHighlightsIfNeeded() { return true }
+        if showSupportUpdateIntroIfNeeded() { return true }
+        if showUpdateShowcaseIntroIfNeeded() { return true }
+        return false
     }
 
     private func showUpdateHighlightsIfNeeded() -> Bool {

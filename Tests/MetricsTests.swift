@@ -14670,10 +14670,19 @@ struct MetricsTests {
         let appDelegateSource = (try? String(
             contentsOfFile: "Sources/Vorssaint/App/AppDelegate.swift",
             encoding: .utf8)) ?? ""
-        expect(appDelegateSource.contains("if !settingsKeepsAppRegular {")
+        let activationPolicySource = (try? String(
+            contentsOfFile: "Sources/Vorssaint/Services/QuickTools/WindowActivationPolicy.swift",
+            encoding: .utf8)) ?? ""
+        let infoPlistSource = (try? String(
+            contentsOfFile: "Resources/Info.plist",
+            encoding: .utf8)) ?? ""
+        expect(appDelegateSource.contains("NSApp.setActivationPolicy(.regular)")
+                && appDelegateSource.contains("self?.openSettingsWindow()")
                 && appDelegateSource.contains("WindowActivationPolicy.retain()")
-                && appDelegateSource.contains("WindowActivationPolicy.release()"),
-               "Settings retains Command Tab presence only while its window is visible")
+                && appDelegateSource.contains("WindowActivationPolicy.release()")
+                && !activationPolicySource.contains("setActivationPolicy(.accessory)")
+                && !infoPlistSource.contains("LSUIElement"),
+               "Eleven Views Tools stays in the Dock and a Dock reopen restores its window")
         expect(Defaults.registeredDefaults[DefaultsKey.recorderSystemAudio] as? Bool == true,
                "a recording carries the sound of the Mac unless the person turns it off")
         expect(Defaults.registeredDefaults[DefaultsKey.recorderMicrophone] as? Bool == false,

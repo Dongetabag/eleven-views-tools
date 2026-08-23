@@ -18,23 +18,19 @@ struct WindowActivationRetention {
     }
 }
 
-/// The app is normally accessory only, with no Dock icon and no place in
-/// Command Tab. While a user-facing window needs to remain reachable it becomes
-/// a regular app, then returns to its normal policy after the last one closes.
+/// User-facing tools may ask for regular-app activation before presenting a
+/// window. Eleven Views Tools now remains a regular Dock app permanently, so a
+/// balanced release only updates retention state and never hides the app again.
 enum WindowActivationPolicy {
     private static var retention = WindowActivationRetention()
-    private static var promoted = false
 
     static func retain() {
         _ = retention.retain()
-        guard !promoted, NSApp.activationPolicy() != .regular else { return }
-        promoted = NSApp.setActivationPolicy(.regular)
+        guard NSApp.activationPolicy() != .regular else { return }
+        NSApp.setActivationPolicy(.regular)
     }
 
     static func release() {
-        guard retention.release(), promoted else { return }
-        if NSApp.setActivationPolicy(.accessory) {
-            promoted = false
-        }
+        _ = retention.release()
     }
 }
