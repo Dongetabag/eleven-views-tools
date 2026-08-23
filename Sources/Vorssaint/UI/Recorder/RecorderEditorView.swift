@@ -12,7 +12,7 @@ struct RecorderEditorView: View {
     let controller: RecorderEditorController
     @ObservedObject private var l10n = L10n.shared
     @State private var sharedRecord: RecordingShareRecord?
-    @AppStorage(DefaultsKey.recorderSharingEnabled) private var sharingEnabled = true
+    @AppStorage(DefaultsKey.recorderSharingEnabled) private var sharingEnabled = false
 
     private var strings: RecorderFeatureStrings {
         FeatureStrings.recorder(l10n.language)

@@ -22,7 +22,7 @@ The upstream code is GPL-3.0-or-later. Selling the app is allowed, but every dis
 - [ ] Eleven Views signing and notarization identity
 - [ ] Eleven Views release feed and signed release process
 - [ ] Custom graphite and blue UI throughout settings, onboarding, and menu panels
-- [x] Disable every upstream-hosted sharing and feedback endpoint
+- [x] Disable every upstream-hosted sharing endpoint and route feedback to `dev@elevenviews.io`
 - [ ] Permission and migration QA under the new bundle identity
 
 ## Integration architecture
@@ -50,7 +50,7 @@ Proposed local envelope:
 }
 ```
 
-No file contents, clipboard contents, recordings, or credentials should leave the Mac without a visible user action and a destination preview. Screenshot sharing, recording sharing, and in-app feedback currently use reserved `.invalid` endpoints, so they remain offline until an Eleven Views service is explicitly provisioned and reviewed.
+No file contents, clipboard contents, recordings, or credentials should leave the Mac without a visible user action and a destination preview. Screenshot and recording sharing have no production endpoint and remain off until an Eleven Views service is explicitly provisioned and reviewed. In-app feedback opens a visible email draft to `dev@elevenviews.io`; the app sends nothing on its own.
 
 ## Release gates
 

@@ -1167,6 +1167,14 @@ struct AboutSettings: View {
                 }
                 Link(l10n.s.viewOnGitHub, destination: AppInfo.repositoryURL)
             }
+            HStack(spacing: 12) {
+                Link(destination: AppInfo.websiteURL) {
+                    Label("elevenviews.io", systemImage: "globe")
+                }
+                Link(destination: AppInfo.supportEmailURL) {
+                    Label(AppInfo.supportEmail, systemImage: "envelope")
+                }
+            }
             Text(AppInfo.copyright)
                 .font(.caption2)
                 .foregroundStyle(.tertiary)

@@ -15,7 +15,7 @@ The foundation pass is in progress:
 - Original GPL license and upstream copyright notices are preserved
 - Eleven Views integration seams are documented in [FORK_PLAN.md](FORK_PLAN.md)
 
-Do not distribute a binary from this branch yet. Upstream-hosted sharing and feedback services are disabled with reserved `.invalid` endpoints. The remaining readiness work includes provisioning owned services if those features are enabled, completing the custom UI pass, validating every permission flow under the new bundle identity, and publishing matching source for every release.
+Client distribution is supported when each build is accompanied by access to its matching GPL source. Screenshot and recording link uploads ship off until an Eleven Views-owned service is provisioned. Feedback opens a visible Mail draft addressed to `dev@elevenviews.io`, and product links lead to [elevenviews.io](https://elevenviews.io).
 
 ## Build locally
 
@@ -45,3 +45,5 @@ GPL software may be sold. Eleven Views can charge for packaged releases, install
 This fork remains licensed under [GPL-3.0-or-later](LICENSE).
 
 Original work copyright © 2026 Vorssaint contributors. Eleven Views changes are identified in the repository history and [FORK_PLAN.md](FORK_PLAN.md). The Vorssaint name, icon, and trade dress are not used for this fork’s product identity.
+
+Product support: [dev@elevenviews.io](mailto:dev@elevenviews.io) · [elevenviews.io](https://elevenviews.io)

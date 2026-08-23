@@ -33,7 +33,7 @@ body:
       description: Add screenshots or recordings if applicable.
 
   - type: input
-    id: vorssaint_version
+    id: eleven_views_tools_version
     attributes:
       label: Eleven Views Tools Version
       description: The number shown in Settings, on the About page.

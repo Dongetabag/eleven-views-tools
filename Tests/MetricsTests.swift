@@ -2280,6 +2280,10 @@ struct MetricsTests {
                "financial support uses the Eleven Views website")
         expect(AppInfo.socialURL.absoluteString == "https://elevenviews.io",
                "social previews use the Eleven Views website")
+        expect(AppInfo.websiteURL.absoluteString == "https://elevenviews.io"
+               && AppInfo.supportEmail == "dev@elevenviews.io"
+               && AppInfo.supportEmailURL.absoluteString == "mailto:dev@elevenviews.io",
+               "website and support actions use the owned Eleven Views identity")
         // AppInfo.version falls back to "dev" in this bare harness, so read
         // the plist the shipped app will actually carry. The pin is a
         // per-release decision: this check fails on every version bump so the
@@ -6652,8 +6656,8 @@ struct MetricsTests {
                "beta is not newer than the released final version")
 
         // Release candidate selection
-        let dummyDMG = URL(string: "https://github.com/vorssaint/vorssaint-utils/releases/download/v3.3.4/Vorssaint.dmg")!
-        let dummyBetaDMG = URL(string: "https://github.com/vorssaint/vorssaint-utils/releases/download/v3.3.4-beta.1/Vorssaint.dmg")!
+        let dummyDMG = URL(string: "https://github.com/Dongetabag/eleven-views-tools/releases/download/v3.3.4/Eleven-Views-Tools.dmg")!
+        let dummyBetaDMG = URL(string: "https://github.com/Dongetabag/eleven-views-tools/releases/download/v3.3.4-beta.1/Eleven-Views-Tools.dmg")!
 
         let candidateList = [
             UpdateServiceSupport.ReleaseCandidate(tagName: "v3.3.4-beta.1", isPrerelease: true, isDraft: false, dmgURL: dummyBetaDMG, dmgExpectedBytes: 1000, body: "Beta notes"),
@@ -8434,7 +8438,7 @@ struct MetricsTests {
         ![Menu bar temperature metrics](Resources/Images/menu-bar-temperature-metrics.png)
 
         ### Website
-        - Official site: [vorssaint.com](https://vorssaint.com).
+        - Official site: [elevenviews.io](https://elevenviews.io).
 
         ## [2.17.1] - 2026-06-17
 
@@ -12351,8 +12355,8 @@ struct MetricsTests {
                "screenshot number shortcuts ship enabled")
         expect(Defaults.registeredDefaults[DefaultsKey.screenshotPreviewPosition] as? String == "",
                "screenshot preview placement preserves the existing automatic behavior by default")
-        expect(Defaults.registeredDefaults[DefaultsKey.screenshotSharingEnabled] as? Bool == true,
-               "temporary screenshot links preserve their existing availability by default")
+        expect(Defaults.registeredDefaults[DefaultsKey.screenshotSharingEnabled] as? Bool == false,
+               "temporary screenshot links stay off until an owned service is configured")
         expect(Defaults.registeredDefaults[DefaultsKey.screenshotToolOrder] as? String
                 == ScreenshotSupport.Tool.defaultOrderStorage,
                "the screenshot rail ships in its useful numbered order")
@@ -12378,19 +12382,18 @@ struct MetricsTests {
         let testShareEndpoint = ScreenshotSharingSupport.endpoint(
             bundleIdentifier: ScreenshotSharingSupport.developerBundleIdentifier,
             developerOverride: "https://test.example/")
-        expect(testShareEndpoint.absoluteString == "https://test.example"
+        expect(testShareEndpoint?.absoluteString == "https://test.example"
                 && ScreenshotSharingSupport.endpoint(
                     bundleIdentifier: "com.vorssaint.utils",
-                    developerOverride: "https://test.example").absoluteString
-                    == ScreenshotSharingSupport.productionEndpoint.absoluteString
+                    developerOverride: "https://test.example") == nil
                 && ScreenshotSharingSupport.endpoint(
                     bundleIdentifier: ScreenshotSharingSupport.developerBundleIdentifier,
-                    developerOverride: "http://test.example")
-                    == ScreenshotSharingSupport.productionEndpoint,
+                    developerOverride: "http://test.example") == nil,
                "only the Developer build accepts a valid HTTPS test endpoint")
-        expect(ScreenshotSharingSupport.uploadURL(endpoint: testShareEndpoint,
-                                                  duration: .sixHours)?.absoluteString
-                == "https://test.example/v1/screenshots?expiresIn=21600",
+        expect(testShareEndpoint.flatMap {
+            ScreenshotSharingSupport.uploadURL(endpoint: $0,
+                                                duration: .sixHours)?.absoluteString
+        } == "https://test.example/v1/screenshots?expiresIn=21600",
                "sharing builds the fixed upload route and expiration query")
         let shareNow = Date(timeIntervalSince1970: 1_000)
         let shareResponse = ScreenshotShareResponse(
@@ -12398,19 +12401,22 @@ struct MetricsTests {
             viewPath: "/s/\(String(repeating: "a", count: 32))",
             expiresAt: "1970-01-01T01:16:40.125Z",
             deleteToken: String(repeating: "b", count: 43))
-        expect(ScreenshotSharingSupport.record(response: shareResponse,
-                                                endpoint: testShareEndpoint,
-                                                now: shareNow)?.url.absoluteString
-                == "https://test.example/s/\(String(repeating: "a", count: 32))",
+        expect(testShareEndpoint.flatMap {
+            ScreenshotSharingSupport.record(response: shareResponse,
+                                             endpoint: $0,
+                                             now: shareNow)?.url.absoluteString
+        } == "https://test.example/s/\(String(repeating: "a", count: 32))",
                "a valid service response becomes an owner-held link record")
         let forgedShareResponse = ScreenshotShareResponse(
             id: "guessable",
             viewPath: "/s/guessable",
             expiresAt: "1970-01-01T01:16:40.125Z",
             deleteToken: "short")
-        expect(ScreenshotSharingSupport.record(response: forgedShareResponse,
-                                                endpoint: testShareEndpoint,
-                                                now: shareNow) == nil,
+        expect(testShareEndpoint.flatMap {
+            ScreenshotSharingSupport.record(response: forgedShareResponse,
+                                             endpoint: $0,
+                                             now: shareNow)
+        } == nil,
                "guessable ids and short deletion tokens are rejected")
         expect(Defaults.registeredDefaults[DefaultsKey.panelUtilityScreenshot] as? Bool == true,
                "the panel row ships visible like its siblings")
@@ -14687,8 +14693,8 @@ struct MetricsTests {
                "a recording carries the sound of the Mac unless the person turns it off")
         expect(Defaults.registeredDefaults[DefaultsKey.recorderMicrophone] as? Bool == false,
                "microphone recording is optional and ships off")
-        expect(Defaults.registeredDefaults[DefaultsKey.recorderSharingEnabled] as? Bool == true,
-               "temporary recording links stay visible but do nothing until explicitly used")
+        expect(Defaults.registeredDefaults[DefaultsKey.recorderSharingEnabled] as? Bool == false,
+               "temporary recording links stay off until an owned service is configured")
         expect(Defaults.registeredDefaults[DefaultsKey.recorderQuality] as? String == "balanced"
                 && Defaults.registeredDefaults[DefaultsKey.recorderFrameRate] as? Int == 60
                 && Defaults.registeredDefaults[DefaultsKey.recorderCountdown] as? Int == 3
@@ -14745,9 +14751,10 @@ struct MetricsTests {
         let recordingShareEndpoint = RecordingSharingSupport.endpoint(
             bundleIdentifier: RecordingSharingSupport.developerBundleIdentifier,
             developerOverride: "https://test.example/")
-        expect(RecordingSharingSupport.uploadURL(endpoint: recordingShareEndpoint,
-                                                 duration: .sixHours)?.absoluteString
-                == "https://test.example/v1/recordings?expiresIn=21600",
+        expect(recordingShareEndpoint.flatMap {
+            RecordingSharingSupport.uploadURL(endpoint: $0,
+                                               duration: .sixHours)?.absoluteString
+        } == "https://test.example/v1/recordings?expiresIn=21600",
                "recording sharing uses its fixed endpoint and expiration query")
         let recordingID = String(repeating: "r", count: 32)
         let recordingResponse = RecordingShareResponse(
@@ -14755,10 +14762,11 @@ struct MetricsTests {
             viewPath: "/s/\(recordingID)",
             expiresAt: "1970-01-01T06:16:40.000Z",
             deleteToken: String(repeating: "t", count: 43))
-        expect(RecordingSharingSupport.record(response: recordingResponse,
-                                              endpoint: recordingShareEndpoint,
-                                              now: Date(timeIntervalSince1970: 1_000))?.id
-                == recordingID,
+        expect(recordingShareEndpoint.flatMap {
+            RecordingSharingSupport.record(response: recordingResponse,
+                                            endpoint: $0,
+                                            now: Date(timeIntervalSince1970: 1_000))?.id
+        } == recordingID,
                "a valid six-hour recording response becomes an owner-held record")
         let recordingPlan = RecordingSharingSupport.encodingPlan(
             duration: 30,

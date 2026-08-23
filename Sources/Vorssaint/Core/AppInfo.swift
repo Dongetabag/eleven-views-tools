@@ -8,6 +8,8 @@ enum AppInfo {
     static let name = "Eleven Views Tools"
     static let copyright = "© 2026 Vorssaint contributors and Eleven Views modifications"
     static let websiteURL = URL(string: "https://elevenviews.io")!
+    static let supportEmail = "dev@elevenviews.io"
+    static let supportEmailURL = URL(string: "mailto:\(supportEmail)")!
     static let repositoryURL = URL(string: "https://github.com/Dongetabag/eleven-views-tools")!
     static let coffeeURL = websiteURL
     static let discordURL = websiteURL

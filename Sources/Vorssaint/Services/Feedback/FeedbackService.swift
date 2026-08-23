@@ -41,85 +41,40 @@ struct FeedbackDiagnostics: Codable {
     }()
 }
 
-private struct FeedbackSubmission: Codable {
-    let kind: FeedbackKind
-    let message: String
-    let diagnostics: FeedbackDiagnostics?
-}
-
-enum FeedbackError: Error {
-    case unavailable
-    case rateLimited
-    case rejected
-    case invalidResponse
-}
-
-@MainActor
-final class FeedbackService {
-    static let shared = FeedbackService()
-
-    // Reserved .invalid endpoint prevents customer feedback from reaching the
-    // upstream service before Eleven Views provisions its own endpoint.
-    private let endpoint = URL(string: "https://feedback.elevenviews.invalid/v1/feedback")!
-    private let session: URLSession
-    private let encoder = JSONEncoder()
-
-    private init() {
-        let configuration = URLSessionConfiguration.ephemeral
-        configuration.urlCache = nil
-        configuration.requestCachePolicy = .reloadIgnoringLocalCacheData
-        configuration.httpCookieAcceptPolicy = .never
-        configuration.httpShouldSetCookies = false
-        configuration.timeoutIntervalForRequest = 20
-        configuration.timeoutIntervalForResource = 30
-        configuration.waitsForConnectivity = false
-        session = URLSession(configuration: configuration)
-    }
-
-    func submit(kind: FeedbackKind,
-                message: String,
-                diagnostics: FeedbackDiagnostics?) async throws {
+enum FeedbackService {
+    /// Creates a local Mail draft addressed to Eleven Views. The app never
+    /// uploads feedback to an unowned endpoint; the person can inspect and edit
+    /// the complete message in their mail client before choosing to send it.
+    static func draftURL(kind: FeedbackKind,
+                         message: String,
+                         diagnostics: FeedbackDiagnostics?) -> URL? {
         let trimmed = message.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard trimmed.utf16.count >= 10, trimmed.utf16.count <= 2_000 else {
-            throw FeedbackError.rejected
+        guard trimmed.utf16.count >= 10, trimmed.utf16.count <= 2_000 else { return nil }
+
+        let kindTitle = kind == .bug ? "Bug report" : "Feature request"
+        var body = [
+            trimmed,
+            "",
+            "---",
+            "Sent from \(AppInfo.name)",
+        ]
+        if let diagnostics {
+            body.append(contentsOf: [
+                "Version: \(diagnostics.appVersion) (\(diagnostics.appBuild))",
+                "macOS: \(diagnostics.macOS)",
+                "Mac: \(diagnostics.macModel ?? "Not included")",
+                "Language: \(diagnostics.language)",
+                "Channel: \(diagnostics.updateChannel)",
+            ])
         }
 
-        let body = try encoder.encode(FeedbackSubmission(
-            kind: kind,
-            message: trimmed,
-            diagnostics: diagnostics
-        ))
-        guard body.count <= 8 * 1_024 else { throw FeedbackError.rejected }
-
-        var request = URLRequest(url: endpoint)
-        request.httpMethod = "POST"
-        request.httpBody = body
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("application/json", forHTTPHeaderField: "Accept")
-        request.setValue("no-store", forHTTPHeaderField: "Cache-Control")
-
-        let data: Data
-        let response: URLResponse
-        do {
-            (data, response) = try await session.data(for: request)
-        } catch {
-            throw FeedbackError.unavailable
-        }
-        guard data.count <= 16 * 1_024, let http = response as? HTTPURLResponse else {
-            throw FeedbackError.invalidResponse
-        }
-        switch http.statusCode {
-        case 201:
-            guard let payload = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-                  let id = payload["id"] as? String,
-                  id.range(of: "^[A-Za-z0-9_-]{32}$", options: .regularExpression) != nil
-            else { throw FeedbackError.invalidResponse }
-        case 429:
-            throw FeedbackError.rateLimited
-        case 500...599:
-            throw FeedbackError.unavailable
-        default:
-            throw FeedbackError.rejected
-        }
+        var components = URLComponents()
+        components.scheme = "mailto"
+        components.path = AppInfo.supportEmail
+        components.queryItems = [
+            URLQueryItem(name: "subject", value: "\(AppInfo.name) — \(kindTitle)"),
+            URLQueryItem(name: "body", value: body.joined(separator: "\n")),
+        ]
+        return components.url
     }
 }
