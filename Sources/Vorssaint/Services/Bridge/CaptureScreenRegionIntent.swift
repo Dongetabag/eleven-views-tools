@@ -30,6 +30,10 @@ struct CaptureScreenRegionIntent: AppIntent {
 
     @MainActor
     func perform() async throws -> some IntentResult & ReturnsValue<String> & ProvidesDialog {
+        // A Shortcut may run as an automation. Require visible confirmation
+        // before reading pixels rather than treating invocation as consent.
+        try await requestConfirmation()
+
         let approval = BridgeReceiptApproval(
             token: "local-intent-\(UUID().uuidString)",
             grantedBy: BridgeGrantedBy.localUserAction.rawValue)

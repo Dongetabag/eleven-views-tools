@@ -61,12 +61,13 @@ enum AttachToDeskIssueBridge {
                                               message: "issueId and filePath are required."))
         }
 
-        let fileURL = URL(fileURLWithPath: trimmedPath)
-        guard FileManager.default.fileExists(atPath: fileURL.path) else {
+        guard DeskBridgeSupport.validIssueId(trimmedIssueId) else {
             return receipt(.failed,
-                           error: BridgeError(code: "file_missing",
-                                              message: "The file to attach does not exist."))
+                           error: BridgeError(code: "invalid_issue",
+                                              message: "Enter a Desk issue ID such as ELE-3164 or its UUID."))
         }
+
+        let fileURL = URL(fileURLWithPath: trimmedPath).standardizedFileURL
 
         guard let credentials = DeskBridgeSupport.credentials(developerOverride: input.credentialOverride) else {
             return receipt(.failed,
@@ -75,21 +76,24 @@ enum AttachToDeskIssueBridge {
         }
 
         do {
-            let localData = try Data(contentsOf: fileURL)
+            let localData = try DeskBridgeSupport.readLocalFile(at: fileURL)
             let localSha = ScreenCaptureRegionBridge.sha256Hex(localData)
             let uploaded = try await DeskBridgeSupport.uploadAttachment(
-                fileURL: fileURL,
+                fileData: localData,
+                filename: fileURL.lastPathComponent,
+                mimeType: DeskBridgeSupport.mimeType(for: fileURL),
                 issueId: trimmedIssueId,
                 credentials: credentials,
                 runId: input.runId)
             try await DeskBridgeSupport.verifyReadBack(result: uploaded,
                                                        credentials: credentials,
-                                                       expectedSha256: localSha)
+                                                       expectedSha256: localSha,
+                                                       expectedByteSize: localData.count)
 
             let artifact = BridgeArtifact(
                 kind: .file,
                 path: fileURL.path,
-                mimeType: DeskBridgeSupport.mimeTypePublic(for: fileURL),
+                mimeType: DeskBridgeSupport.mimeType(for: fileURL),
                 bytes: uploaded.byteSize,
                 sha256: uploaded.sha256,
                 description: "Attached to Desk issue \(uploaded.issueId) as \(uploaded.attachmentId). Read-back verified.")
@@ -105,6 +109,14 @@ enum AttachToDeskIssueBridge {
                 return receipt(.failed,
                                error: BridgeError(code: "file_too_large",
                                                   message: "The file exceeds the Desk upload limit."))
+            case .fileMissing:
+                return receipt(.failed,
+                               error: BridgeError(code: "file_missing",
+                                                  message: "The file is missing, empty, not a regular file, or is a symbolic link."))
+            case .invalidParameters:
+                return receipt(.failed,
+                               error: BridgeError(code: "invalid_parameters",
+                                                  message: "The Desk destination is invalid."))
             case .verificationFailed:
                 return receipt(.failed,
                                error: BridgeError(code: "readback_mismatch",
@@ -115,30 +127,11 @@ enum AttachToDeskIssueBridge {
             case .readBackFailed(let detail):
                 return receipt(.failed,
                                error: BridgeError(code: "readback_failed", message: detail))
-            default:
-                return receipt(.failed,
-                               error: BridgeError(code: "attach_failed",
-                                                  message: "Could not attach the file to Desk."))
             }
         } catch {
             return receipt(.failed,
                            error: BridgeError(code: "attach_failed",
                                               message: error.localizedDescription))
-        }
-    }
-}
-
-private extension DeskBridgeSupport {
-    static func mimeTypePublic(for url: URL) -> String {
-        switch url.pathExtension.lowercased() {
-        case "png": return "image/png"
-        case "jpg", "jpeg": return "image/jpeg"
-        case "gif": return "image/gif"
-        case "webp": return "image/webp"
-        case "pdf": return "application/pdf"
-        case "txt": return "text/plain"
-        case "json": return "application/json"
-        default: return "application/octet-stream"
         }
     }
 }

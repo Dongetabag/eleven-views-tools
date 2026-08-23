@@ -21,6 +21,10 @@ struct AttachToDeskIssueIntent: AppIntent {
 
     @MainActor
     func perform() async throws -> some IntentResult & ReturnsValue<String> & ProvidesDialog {
+        // Shortcuts automations can invoke App Intents without a fresh tap.
+        // Always display Apple's confirmation UI before moving bytes off Mac.
+        try await requestConfirmation()
+
         let approval = BridgeReceiptApproval(
             token: "local-intent-\(UUID().uuidString)",
             grantedBy: BridgeGrantedBy.localUserAction.rawValue)
