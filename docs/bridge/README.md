@@ -30,12 +30,15 @@ and a destination preview.
 | `../../Sources/Vorssaint/Services/Bridge/BridgeContract.swift` | Swift `Codable` mirror of the request / receipt schemas. |
 | `../../Sources/Vorssaint/Services/Bridge/ScreenCaptureRegionBridge.swift` | Handler for `screen.captureRegion`: captures a region, writes a local PNG, returns a receipt. |
 | `../../Sources/Vorssaint/Services/Bridge/CaptureScreenRegionIntent.swift` | The `screen.captureRegion` App Intent (Shortcuts / Spotlight entry point). |
+| `../../Sources/Vorssaint/Services/Bridge/SystemSnapshotBridge.swift` | Handler for `system.snapshot`: read-only CPU/mem/disk/network summary + receipt. |
+| `../../Sources/Vorssaint/Services/Bridge/SystemSnapshotIntent.swift` | The `system.snapshot` App Intent (Shortcuts / Spotlight entry point). |
 
 ## Implemented capabilities
 
 | Capability | Kind | Swift |
 | --- | --- | --- |
 | `screen.captureRegion` | `app_intent` | `CaptureScreenRegionIntent` → `ScreenCaptureRegionBridge` (ELE-3159) |
+| `system.snapshot` | `app_intent` | `SystemSnapshotIntent` → `SystemSnapshotBridge` (ELE-3158) |
 
 `screen.captureRegion` returns the **local path** of the capture in its receipt
 artifact and never moves the file off the Mac; a later `share`-scope capability

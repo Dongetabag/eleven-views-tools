@@ -80,6 +80,18 @@ struct BridgeError: Codable {
 
 /// One thing the action produced. File / image artifacts stay local until a
 /// separate, user-approved `share` capability moves them.
+/// Point-in-time metrics returned inline on a `system.snapshot` receipt.
+/// Keys match `docs/bridge/examples/system-snapshot.receipt.json`.
+struct BridgeSystemSnapshotMetrics: Codable, Equatable {
+    var cpuLoadPercent: Double
+    var memoryUsedBytes: UInt64
+    var memoryTotalBytes: UInt64
+    var diskFreeBytes: UInt64
+    var diskTotalBytes: UInt64
+    var networkUpBytesPerSec: Double
+    var networkDownBytesPerSec: Double
+}
+
 struct BridgeArtifact: Codable {
     enum Kind: String, Codable {
         case file, text, json, image
@@ -90,6 +102,9 @@ struct BridgeArtifact: Codable {
     var mimeType: String?
     var bytes: Int?
     var sha256: String?
+    /// Small json/text payloads (receipt schema `inline`). Currently used by
+    /// `system.snapshot`; other capabilities leave this nil.
+    var inline: BridgeSystemSnapshotMetrics?
     var description: String?
 }
 
