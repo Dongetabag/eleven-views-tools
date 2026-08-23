@@ -126,6 +126,31 @@
       "description": "Switch the system appearance between light and dark via the CommandBar quick toggle.",
       "feature": "quickToggles",
       "commandBarActionId": "action.darkMode"
+    },
+    {
+      "id": "share.attachToDeskIssue",
+      "title": "Attach file to Desk issue",
+      "kind": "app_intent",
+      "scope": "share",
+      "approvalRequired": true,
+      "permissions": [],
+      "beta": false,
+      "description": "Upload a local file to a scoped Desk issue via the Paperclip attachments API. Requires configured Desk credentials and explicit user approval; read-back verifies SHA-256 before reporting success.",
+      "feature": "commandBar",
+      "parameters": [
+        {
+          "name": "issueId",
+          "type": "string",
+          "required": true,
+          "description": "Desk issue UUID to attach to."
+        },
+        {
+          "name": "filePath",
+          "type": "string",
+          "required": true,
+          "description": "Absolute local path of the file to upload."
+        }
+      ]
     }
   ]
 }

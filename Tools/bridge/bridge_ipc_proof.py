@@ -226,6 +226,15 @@ def scenarios() -> list[Scenario]:
         Scenario("approval-required capability with expired token",
                  trusted, "screen.captureRegion", "capture", stale_token, "needs_approval", "approval.expired",
                  caller_name="io.elevenviews.tools.bridge-harness"),
+        Scenario("share attach with fresh approval (desk caller)",
+                 desk, "share.attachToDeskIssue", "share", fresh_token, "success", None,
+                 caller_name="io.elevenviews.desk"),
+        Scenario("share attach without approval token",
+                 desk, "share.attachToDeskIssue", "share", None, "needs_approval", "approval.missing",
+                 caller_name="io.elevenviews.desk"),
+        Scenario("harness cannot invoke share attach (forbidden for caller)",
+                 trusted, "share.attachToDeskIssue", "share", fresh_token, "denied", "capability.forbiddenForCaller",
+                 caller_name="io.elevenviews.tools.bridge-harness"),
     ]
 
 

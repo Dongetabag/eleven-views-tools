@@ -1,0 +1,20 @@
+{
+  "schema": "elevenviews.bridge.receipt.v1",
+  "receiptId": "3c4d5e6f-7a8b-9c0d-1e2f-3a4b5c6d7e8f",
+  "requestId": "8a5f3b02-1d4c-4e6f-9b2a-3c0d1e2f3a4b",
+  "capability": "share.attachToDeskIssue",
+  "outcome": "needs_approval",
+  "permissionsUsed": [],
+  "approval": null,
+  "error": {
+    "code": "approval_required",
+    "message": "share.attachToDeskIssue requires a local-user approval token."
+  },
+  "startedAt": "2026-08-23T16:31:00Z",
+  "completedAt": "2026-08-23T16:31:00Z",
+  "host": {
+    "app": "Eleven Views Tools",
+    "version": "1.0.0",
+    "registryVersion": 1
+  }
+}
