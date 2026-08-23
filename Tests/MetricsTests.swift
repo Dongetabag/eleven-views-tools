@@ -9588,9 +9588,8 @@ struct MetricsTests {
         expect(AppFeature.screenshot.permissions == [.screenRecording]
                 && AppFeature.screenshot.onboardingPermissions == [.screenRecording],
                "screenshots only need the screen recording grant")
-        expect(AppFeature.screenRecorder.onboardingPermissions
-                == [.screenRecording, .accessibility],
-               "the recorder choice explains both permissions it needs")
+        expect(AppFeature.screenRecorder.onboardingPermissions == [.screenRecording],
+               "recording setup asks only for the grant required to record")
         expect(AppFeature.cleaner.onboardingPermissions.isEmpty
                 && AppFeature.cameraPreview.onboardingPermissions.isEmpty,
                "contextual grants are not requested during first setup")
@@ -11892,8 +11891,21 @@ struct MetricsTests {
                "a denied or stale screen-capture grant opens the exact macOS recovery pane")
         expect(captureServiceSource.contains(
             "else if Permissions.shared.requestScreenRecording()")
-                && captureServiceSource.contains("self?.capture(initial: selected)"),
+                && captureServiceSource.contains("self?.capture(initial: selected)")
+                && captureServiceSource.contains("PermissionGuideOverlay.shared.dismiss()"),
                "granting Screen Recording resumes the capture the person already requested")
+
+        let recorderServiceSource = (try? String(
+            contentsOfFile: "Sources/Vorssaint/Services/Recorder/ScreenRecorderService.swift",
+            encoding: .utf8)) ?? ""
+        let recorderSettingsSource = (try? String(
+            contentsOfFile: "Sources/Vorssaint/UI/Settings/ScreenRecorderSettings.swift",
+            encoding: .utf8)) ?? ""
+        expect(!recorderServiceSource.contains(
+            "guard Permissions.shared.accessibility else")
+                && !recorderSettingsSource.contains(
+                    "PermissionRow(kind: .accessibility)"),
+               "screen recording never blocks on optional typing-timing accessibility")
 
         let captureIntentSource = (try? String(
             contentsOfFile: "Sources/Vorssaint/Services/Bridge/CaptureScreenRegionIntent.swift",

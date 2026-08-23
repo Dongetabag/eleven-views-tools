@@ -127,6 +127,12 @@ final class ScreenCaptureService: ObservableObject {
         }
         guard selection == nil, !ScreenshotSelectionController.isSessionOnScreen else { return }
 
+        // Permission guides belong to the action that opened them. Do not let
+        // an old Accessibility card from Window Layout float over a later
+        // screenshot or recording selector and make the new action look
+        // blocked by the wrong permission.
+        PermissionGuideOverlay.shared.dismiss()
+
         let tools = ScreenCaptureTool.available()
         guard !tools.isEmpty else { return }
         let selected = preferred.flatMap { tools.contains($0) ? $0 : nil }

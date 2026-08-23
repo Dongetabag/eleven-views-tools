@@ -273,6 +273,11 @@ extension AppFeature {
              .uninstaller, .homebrew, .appUpdates, .mixer, .cameraPreview,
              .micMute:
             return []
+        case .screenRecorder:
+            // Recording needs Screen Recording. Accessibility only enriches
+            // automatic zooms with anonymous typing timing when it is already
+            // available, so it must never be presented as a launch gate.
+            return [.screenRecording]
         default:
             return permissions.filter { $0 == .accessibility || $0 == .screenRecording }
         }
