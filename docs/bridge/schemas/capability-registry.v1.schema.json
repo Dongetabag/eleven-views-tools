@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://elevenviews.io/schemas/bridge/capability-registry.v1.schema.json",
+  "title": "ElevenViewsBridge Capability Registry v1",
+  "description": "Machine-readable allowlist of the actions the ElevenViews Tools bridge can expose to approved callers. Generated from FeatureCatalog + CommandBar metadata by Tools/bridge/bridge_tool.py. Do not hand-edit the generated registry; edit Tools/bridge/manifest.json and regenerate.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "registryVersion", "app", "permissions", "capabilities"],
+  "properties": {
+    "schema": {
+      "const": "elevenviews.bridge.capability-registry.v1"
+    },
+    "registryVersion": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Bumped whenever the capability set changes in a way callers must notice."
+    },
+    "app": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["bundleId", "name"],
+      "properties": {
+        "bundleId": { "type": "string" },
+        "name": { "type": "string" }
+      }
+    },
+    "permissions": {
+      "type": "array",
+      "description": "Every macOS permission a capability may consume, mirrored from AppPermission.",
+      "items": { "$ref": "#/$defs/permission" },
+      "uniqueItems": true
+    },
+    "capabilities": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/capability" }
+    }
+  },
+  "$defs": {
+    "permission": {
+      "type": "string",
+      "enum": [
+        "accessibility",
+        "screenRecording",
+        "fullDiskAccess",
+        "filesAndFolders",
+        "notifications",
+        "automationFinder",
+        "automationTerminal",
+        "audioCapture",
+        "microphone",
+        "camera",
+        "appManagement"
+      ]
+    },
+    "scope": {
+      "type": "string",
+      "description": "Coarse risk class the bridge uses for approval defaults.",
+      "enum": ["read", "capture", "share", "run", "system"]
+    },
+    "kind": {
+      "type": "string",
+      "description": "How the capability is fulfilled inside the app.",
+      "enum": ["app_intent", "command_bar_action", "deep_link"]
+    },
+    "capability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "kind",
+        "scope",
+        "approvalRequired",
+        "permissions",
+        "beta"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-zA-Z0-9]*(\\.[a-z][a-zA-Z0-9]*)+$",
+          "description": "Stable dotted capability id, e.g. system.snapshot. Never renamed once shipped."
+        },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "kind": { "$ref": "#/$defs/kind" },
+        "scope": { "$ref": "#/$defs/scope" },
+        "approvalRequired": {
+          "type": "boolean",
+          "description": "When true the bridge must hold a valid approval token before running."
+        },
+        "feature": {
+          "type": "string",
+          "description": "AppFeature raw value backing this capability (source of the permission set)."
+        },
+        "commandBarActionId": {
+          "type": "string",
+          "pattern": "^action\\.[a-zA-Z0-9._]+$",
+          "description": "The CommandBarCatalog entry id fulfilled when kind == command_bar_action. Verified to exist at generation time."
+        },
+        "deepLink": {
+          "type": "string",
+          "description": "URL template opened when kind == deep_link."
+        },
+        "permissions": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/permission" },
+          "uniqueItems": true,
+          "description": "Resolved from the backing AppFeature.permissions."
+        },
+        "beta": {
+          "type": "boolean",
+          "description": "Mirrors AppFeature.isBeta; beta capabilities may be unavailable by default."
+        },
+        "parameters": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/parameter" }
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "kind": { "const": "command_bar_action" } } },
+          "then": { "required": ["commandBarActionId"] }
+        },
+        {
+          "if": { "properties": { "kind": { "const": "deep_link" } } },
+          "then": { "required": ["deepLink"] }
+        }
+      ]
+    },
+    "parameter": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "type"],
+      "properties": {
+        "name": { "type": "string" },
+        "type": {
+          "type": "string",
+          "enum": ["string", "integer", "boolean", "rect"]
+        },
+        "required": { "type": "boolean", "default": false },
+        "min": { "type": "integer" },
+        "max": { "type": "integer" },
+        "description": { "type": "string" }
+      }
+    }
+  }
+}

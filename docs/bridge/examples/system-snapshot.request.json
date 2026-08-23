@@ -1,0 +1,14 @@
+{
+  "schema": "elevenviews.bridge.request.v1",
+  "requestId": "3f2a9c14-6b1e-4a1c-9d8e-2b7c5a0f1e33",
+  "capability": "system.snapshot",
+  "scope": "read",
+  "caller": {
+    "id": "io.elevenviews.desk",
+    "name": "Eleven Views Desk",
+    "teamId": "EV11VIEWS00",
+    "signingIdentifier": "io.elevenviews.desk"
+  },
+  "approval": null,
+  "requestedAt": "2026-08-23T16:20:00Z"
+}
