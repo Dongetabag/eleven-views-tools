@@ -178,7 +178,7 @@ struct GlobalShortcut: Equatable, Hashable {
     // W for webcam, on the same free control-option-command layer.
     static let cameraPreviewDefault = GlobalShortcut(keyCode: Int64(kVK_ANSI_W),
                                                      modifiers: [.control, .option, .command])
-    // V for Vorssaint: the quick launcher's own combination.
+    // V for Eleven Views Tools: the quick launcher's own combination.
     static let quickLauncherDefault = GlobalShortcut(keyCode: Int64(kVK_ANSI_V),
                                                      modifiers: [.control, .command])
     // Default screenshot shortcut on the available control-option-command layer.

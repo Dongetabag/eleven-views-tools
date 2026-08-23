@@ -240,9 +240,9 @@ extension WindowLayoutFeatureStrings {
         previousDisplay: "이전 디스플레이",
         edgeSnapEnable: "화면 가장자리에 윈도우 맞추기",
         edgeSnapCaption: "여기에서 켠 다음 윈도우 제목 막대를 화면 가장자리나 모서리로 드래그하여 놓으세요.",
-        edgeSnapSystemConflict: "macOS가 같은 가장자리를 사용 중입니다. 데스크탑 및 Dock에서 윈도우 타일링을 끄면 Vorssaint가 사용할 수 있습니다.",
+        edgeSnapSystemConflict: "macOS가 같은 가장자리를 사용 중입니다. 데스크탑 및 Dock에서 윈도우 타일링을 끄면 Eleven Views Tools가 사용할 수 있습니다.",
         edgeSnapOpenSystemSettings: "데스크탑 및 Dock 열기",
-        edgeSnapWaitingForSystem: "Vorssaint에서 켜졌습니다. macOS 타일링을 끄면 바로 작동합니다.",
+        edgeSnapWaitingForSystem: "Eleven Views Tools에서 켜졌습니다. macOS 타일링을 끄면 바로 작동합니다.",
         marginMaximize: "여백 두고 최대화"
     )
 }
@@ -251,7 +251,7 @@ extension MonitorAlertFeatureStrings {
     static let ko = MonitorAlertFeatureStrings(
         section: "알림",
         caption: "선택한 기준에 도달하면 알림이 표시됩니다. CPU 사용량과 온도는 기준을 약 12초 동안 계속 넘어야 하므로 짧은 급증은 무시됩니다. 반복 설정은 같은 알림의 반복만 제한합니다.",
-        notificationsDenied: "시스템 설정에서 Vorssaint 알림이 꺼져 있어 경고를 표시할 수 없습니다.",
+        notificationsDenied: "시스템 설정에서 Eleven Views Tools 알림이 꺼져 있어 경고를 표시할 수 없습니다.",
         cpu: "높은 CPU 사용량",
         cpuTemperature: "높은 CPU 온도",
         memory: "위험한 메모리 압력",
@@ -1225,9 +1225,9 @@ struct WindowLayoutFeatureStrings {
         previousDisplay: "Previous display",
         edgeSnapEnable: "Snap windows at screen edges",
         edgeSnapCaption: "Turn this on, then drag a window title bar to any screen edge or corner and release.",
-        edgeSnapSystemConflict: "macOS is using the same edges. Turn off window tiling in Desktop & Dock so Vorssaint can take over.",
+        edgeSnapSystemConflict: "macOS is using the same edges. Turn off window tiling in Desktop & Dock so Eleven Views Tools can take over.",
         edgeSnapOpenSystemSettings: "Open Desktop & Dock",
-        edgeSnapWaitingForSystem: "Enabled in Vorssaint. It starts working as soon as macOS tiling is off.",
+        edgeSnapWaitingForSystem: "Enabled in Eleven Views Tools. It starts working as soon as macOS tiling is off.",
         marginMaximize: "Maximize with Margin"
     )
 
@@ -1285,9 +1285,9 @@ struct WindowLayoutFeatureStrings {
         previousDisplay: "Display anterior",
         edgeSnapEnable: "Encaixar janelas nas bordas da tela",
         edgeSnapCaption: "Ative aqui. Depois arraste a barra de título até qualquer borda ou canto da tela e solte.",
-        edgeSnapSystemConflict: "O macOS está usando as mesmas bordas. Desligue o encaixe em Mesa e Dock para o Vorssaint assumir.",
+        edgeSnapSystemConflict: "O macOS está usando as mesmas bordas. Desligue o encaixe em Mesa e Dock para o Eleven Views Tools assumir.",
         edgeSnapOpenSystemSettings: "Abrir Mesa e Dock",
-        edgeSnapWaitingForSystem: "Ativado no Vorssaint. Começa a funcionar assim que o encaixe do macOS for desligado.",
+        edgeSnapWaitingForSystem: "Ativado no Eleven Views Tools. Começa a funcionar assim que o encaixe do macOS for desligado.",
         marginMaximize: "Maximizar com margem"
     )
 
@@ -1345,9 +1345,9 @@ struct WindowLayoutFeatureStrings {
         previousDisplay: "Önceki ekran",
         edgeSnapEnable: "Pencereleri ekran kenarlarına yerleştir",
         edgeSnapCaption: "Buradan açın, sonra pencerenin başlık çubuğunu herhangi bir ekran kenarına veya köşeye sürükleyip bırakın.",
-        edgeSnapSystemConflict: "macOS aynı kenarları kullanıyor. Vorssaint’ın devralması için Masaüstü ve Dock’taki pencere döşemeyi kapatın.",
+        edgeSnapSystemConflict: "macOS aynı kenarları kullanıyor. Eleven Views Tools’ın devralması için Masaüstü ve Dock’taki pencere döşemeyi kapatın.",
         edgeSnapOpenSystemSettings: "Masaüstü ve Dock’u Aç",
-        edgeSnapWaitingForSystem: "Vorssaint’ta açık. macOS döşemesi kapanınca çalışmaya başlar.",
+        edgeSnapWaitingForSystem: "Eleven Views Tools’ta açık. macOS döşemesi kapanınca çalışmaya başlar.",
         marginMaximize: "Kenar boşluklu büyüt"
     )
 
@@ -1405,9 +1405,9 @@ struct WindowLayoutFeatureStrings {
         previousDisplay: "Предыдущий дисплей",
         edgeSnapEnable: "Привязывать окна к краям экрана",
         edgeSnapCaption: "Включите здесь, затем перетащите заголовок окна к любой границе экрана или углу и отпустите.",
-        edgeSnapSystemConflict: "macOS использует те же края. Отключите размещение окон в разделе «Рабочий стол и Dock», чтобы их использовал Vorssaint.",
+        edgeSnapSystemConflict: "macOS использует те же края. Отключите размещение окон в разделе «Рабочий стол и Dock», чтобы их использовал Eleven Views Tools.",
         edgeSnapOpenSystemSettings: "Открыть «Рабочий стол и Dock»",
-        edgeSnapWaitingForSystem: "Включено в Vorssaint. Заработает сразу после отключения размещения окон macOS.",
+        edgeSnapWaitingForSystem: "Включено в Eleven Views Tools. Заработает сразу после отключения размещения окон macOS.",
         marginMaximize: "Развернуть с отступом"
     )
 
@@ -1465,9 +1465,9 @@ struct WindowLayoutFeatureStrings {
         previousDisplay: "Pantalla anterior",
         edgeSnapEnable: "Ajustar ventanas a los bordes de la pantalla",
         edgeSnapCaption: "Actívalo aquí y arrastra la barra de título a cualquier borde o esquina de la pantalla; luego suelta.",
-        edgeSnapSystemConflict: "macOS usa los mismos bordes. Desactiva el ajuste de ventanas en Escritorio y Dock para que Vorssaint tome el control.",
+        edgeSnapSystemConflict: "macOS usa los mismos bordes. Desactiva el ajuste de ventanas en Escritorio y Dock para que Eleven Views Tools tome el control.",
         edgeSnapOpenSystemSettings: "Abrir Escritorio y Dock",
-        edgeSnapWaitingForSystem: "Activado en Vorssaint. Funcionará en cuanto se desactive el ajuste de ventanas de macOS.",
+        edgeSnapWaitingForSystem: "Activado en Eleven Views Tools. Funcionará en cuanto se desactive el ajuste de ventanas de macOS.",
         marginMaximize: "Maximizar con margen"
     )
 
@@ -1525,9 +1525,9 @@ struct WindowLayoutFeatureStrings {
         previousDisplay: "Vorheriges Display",
         edgeSnapEnable: "Fenster an Bildschirmrändern einrasten",
         edgeSnapCaption: "Hier einschalten, dann die Titelleiste an einen Bildschirmrand oder eine Ecke ziehen und loslassen.",
-        edgeSnapSystemConflict: "macOS verwendet dieselben Ränder. Deaktiviere die Fensteranordnung unter Schreibtisch & Dock, damit Vorssaint übernimmt.",
+        edgeSnapSystemConflict: "macOS verwendet dieselben Ränder. Deaktiviere die Fensteranordnung unter Schreibtisch & Dock, damit Eleven Views Tools übernimmt.",
         edgeSnapOpenSystemSettings: "Schreibtisch & Dock öffnen",
-        edgeSnapWaitingForSystem: "In Vorssaint aktiviert. Es funktioniert, sobald die Fensteranordnung von macOS aus ist.",
+        edgeSnapWaitingForSystem: "In Eleven Views Tools aktiviert. Es funktioniert, sobald die Fensteranordnung von macOS aus ist.",
         marginMaximize: "Mit Rand maximieren"
     )
 
@@ -1585,9 +1585,9 @@ struct WindowLayoutFeatureStrings {
         previousDisplay: "Écran précédent",
         edgeSnapEnable: "Ancrer les fenêtres aux bords de l’écran",
         edgeSnapCaption: "Activez ici, puis faites glisser la barre de titre vers n’importe quel bord ou coin de l’écran et relâchez.",
-        edgeSnapSystemConflict: "macOS utilise les mêmes bords. Désactivez le placement des fenêtres dans Bureau et Dock pour laisser Vorssaint prendre le relais.",
+        edgeSnapSystemConflict: "macOS utilise les mêmes bords. Désactivez le placement des fenêtres dans Bureau et Dock pour laisser Eleven Views Tools prendre le relais.",
         edgeSnapOpenSystemSettings: "Ouvrir Bureau et Dock",
-        edgeSnapWaitingForSystem: "Activé dans Vorssaint. Il fonctionnera dès que le placement des fenêtres de macOS sera désactivé.",
+        edgeSnapWaitingForSystem: "Activé dans Eleven Views Tools. Il fonctionnera dès que le placement des fenêtres de macOS sera désactivé.",
         marginMaximize: "Agrandir avec marge"
     )
 
@@ -1645,9 +1645,9 @@ struct WindowLayoutFeatureStrings {
         previousDisplay: "Display precedente",
         edgeSnapEnable: "Allinea le finestre ai bordi dello schermo",
         edgeSnapCaption: "Attiva qui, poi trascina la barra del titolo verso un bordo o un angolo dello schermo e rilascia.",
-        edgeSnapSystemConflict: "macOS usa gli stessi bordi. Disattiva l’affiancamento in Scrivania e Dock per lasciare il controllo a Vorssaint.",
+        edgeSnapSystemConflict: "macOS usa gli stessi bordi. Disattiva l’affiancamento in Scrivania e Dock per lasciare il controllo a Eleven Views Tools.",
         edgeSnapOpenSystemSettings: "Apri Scrivania e Dock",
-        edgeSnapWaitingForSystem: "Attivato in Vorssaint. Funzionerà appena l’affiancamento di macOS sarà disattivato.",
+        edgeSnapWaitingForSystem: "Attivato in Eleven Views Tools. Funzionerà appena l’affiancamento di macOS sarà disattivato.",
         marginMaximize: "Massimizza con margine"
     )
 
@@ -1705,9 +1705,9 @@ struct WindowLayoutFeatureStrings {
         previousDisplay: "前のディスプレイ",
         edgeSnapEnable: "画面の端にウインドウをスナップ",
         edgeSnapCaption: "ここでオンにしてから、タイトルバーを画面の端または隅へドラッグして放します。",
-        edgeSnapSystemConflict: "macOSが同じ画面端を使用しています。Vorssaintで使うには「デスクトップとDock」でウインドウのタイル表示をオフにしてください。",
+        edgeSnapSystemConflict: "macOSが同じ画面端を使用しています。Eleven Views Toolsで使うには「デスクトップとDock」でウインドウのタイル表示をオフにしてください。",
         edgeSnapOpenSystemSettings: "デスクトップとDockを開く",
-        edgeSnapWaitingForSystem: "Vorssaintでオンになっています。macOSのタイル表示をオフにすると動作します。",
+        edgeSnapWaitingForSystem: "Eleven Views Toolsでオンになっています。macOSのタイル表示をオフにすると動作します。",
         marginMaximize: "余白付きで最大化"
     )
 
@@ -1765,9 +1765,9 @@ struct WindowLayoutFeatureStrings {
         previousDisplay: "上一台显示器",
         edgeSnapEnable: "将窗口贴靠到屏幕边缘",
         edgeSnapCaption: "在此开启，然后将窗口标题栏拖到屏幕任意边缘或角落并松开。",
-        edgeSnapSystemConflict: "macOS 正在使用相同的屏幕边缘。请在“桌面与程序坞”中关闭窗口平铺，让 Vorssaint 接管。",
+        edgeSnapSystemConflict: "macOS 正在使用相同的屏幕边缘。请在“桌面与程序坞”中关闭窗口平铺，让 Eleven Views Tools 接管。",
         edgeSnapOpenSystemSettings: "打开桌面与程序坞",
-        edgeSnapWaitingForSystem: "已在 Vorssaint 中开启。关闭 macOS 窗口平铺后即可使用。",
+        edgeSnapWaitingForSystem: "已在 Eleven Views Tools 中开启。关闭 macOS 窗口平铺后即可使用。",
         marginMaximize: "带边距最大化"
     )
 
@@ -1825,9 +1825,9 @@ struct WindowLayoutFeatureStrings {
         previousDisplay: "上一台顯示器",
         edgeSnapEnable: "將視窗貼齊螢幕邊緣",
         edgeSnapCaption: "在此開啟，然後將視窗標題列拖到螢幕任一邊緣或角落並放開。",
-        edgeSnapSystemConflict: "macOS 正在使用相同的螢幕邊緣。請在「桌面與 Dock」關閉視窗並排，讓 Vorssaint 接管。",
+        edgeSnapSystemConflict: "macOS 正在使用相同的螢幕邊緣。請在「桌面與 Dock」關閉視窗並排，讓 Eleven Views Tools 接管。",
         edgeSnapOpenSystemSettings: "開啟桌面與 Dock",
-        edgeSnapWaitingForSystem: "已在 Vorssaint 中開啟。關閉 macOS 視窗並排後即可使用。",
+        edgeSnapWaitingForSystem: "已在 Eleven Views Tools 中開啟。關閉 macOS 視窗並排後即可使用。",
         marginMaximize: "保留邊距最大化"
     )
 
@@ -1885,9 +1885,9 @@ struct WindowLayoutFeatureStrings {
         previousDisplay: "上一部顯示器",
         edgeSnapEnable: "將視窗貼齊螢幕邊緣",
         edgeSnapCaption: "在此開啟，然後將視窗標題列拖到螢幕任一邊緣或角落並放開。",
-        edgeSnapSystemConflict: "macOS 正在使用相同的螢幕邊緣。請在「桌面與 Dock」關閉視窗並排，讓 Vorssaint 接管。",
+        edgeSnapSystemConflict: "macOS 正在使用相同的螢幕邊緣。請在「桌面與 Dock」關閉視窗並排，讓 Eleven Views Tools 接管。",
         edgeSnapOpenSystemSettings: "開啟桌面與 Dock",
-        edgeSnapWaitingForSystem: "已在 Vorssaint 中開啟。關閉 macOS 視窗並排後即可使用。",
+        edgeSnapWaitingForSystem: "已在 Eleven Views Tools 中開啟。關閉 macOS 視窗並排後即可使用。",
         marginMaximize: "保留邊距最大化"
     )
 }
@@ -1925,7 +1925,7 @@ struct MonitorAlertFeatureStrings {
     static let enUS = MonitorAlertFeatureStrings(
         section: "Alerts",
         caption: "Alerts fire when their selected limits are reached. CPU use and temperature ignore spikes shorter than about 12 seconds. The repeat setting only limits repeats of the same alert.",
-        notificationsDenied: "Notifications for Vorssaint are off in System Settings, so alerts cannot appear.",
+        notificationsDenied: "Notifications for Eleven Views Tools are off in System Settings, so alerts cannot appear.",
         cpu: "High CPU",
         cpuTemperature: "High CPU temperature",
         memory: "Critical memory pressure",
@@ -1956,7 +1956,7 @@ struct MonitorAlertFeatureStrings {
     static let ptBR = MonitorAlertFeatureStrings(
         section: "Alertas",
         caption: "Os alertas disparam quando os limites escolhidos são atingidos. O uso e a temperatura da CPU ignoram picos com menos de 12 segundos. A opção de repetição só limita o mesmo alerta.",
-        notificationsDenied: "As notificações do Vorssaint estão desativadas nos Ajustes do Sistema, então os alertas não aparecem.",
+        notificationsDenied: "As notificações do Eleven Views Tools estão desativadas nos Ajustes do Sistema, então os alertas não aparecem.",
         cpu: "CPU alta",
         cpuTemperature: "Temperatura alta da CPU",
         memory: "Pressão de memória crítica",
@@ -1987,7 +1987,7 @@ struct MonitorAlertFeatureStrings {
     static let tr = MonitorAlertFeatureStrings(
         section: "Uyarılar",
         caption: "Uyarılar seçilen eşiklere ulaşıldığında gönderilir. CPU yaklaşık 12 saniyeden kısa sıçramaları yok sayar. Tekrarlama ayarı yalnızca aynı uyarının tekrarlanmasını sınırlar.",
-        notificationsDenied: "Sistem Ayarları'nda Vorssaint bildirimleri kapalı, bu yüzden uyarılar görünemez.",
+        notificationsDenied: "Sistem Ayarları'nda Eleven Views Tools bildirimleri kapalı, bu yüzden uyarılar görünemez.",
         cpu: "Yüksek CPU",
         cpuTemperature: "Yüksek CPU sıcaklığı",
         memory: "Kritik bellek basıncı",
@@ -2018,7 +2018,7 @@ struct MonitorAlertFeatureStrings {
     static let ru = MonitorAlertFeatureStrings(
         section: "Оповещения",
         caption: "Оповещения появляются при достижении выбранных порогов. CPU игнорирует скачки короче примерно 12 секунд. Настройка повтора ограничивает только повтор одного и того же оповещения.",
-        notificationsDenied: "Уведомления Vorssaint выключены в Системных настройках, поэтому оповещения не появятся.",
+        notificationsDenied: "Уведомления Eleven Views Tools выключены в Системных настройках, поэтому оповещения не появятся.",
         cpu: "Высокая нагрузка CPU",
         cpuTemperature: "Высокая температура CPU",
         memory: "Критическое давление памяти",
@@ -2049,7 +2049,7 @@ struct MonitorAlertFeatureStrings {
     static let es = MonitorAlertFeatureStrings(
         section: "Alertas",
         caption: "Las alertas aparecen cuando se alcanzan los límites elegidos. La CPU ignora los picos de menos de unos 12 segundos. El ajuste de repetición solo limita la repetición de la misma alerta.",
-        notificationsDenied: "Las notificaciones de Vorssaint están desactivadas en Ajustes del Sistema, así que las alertas no aparecen.",
+        notificationsDenied: "Las notificaciones de Eleven Views Tools están desactivadas en Ajustes del Sistema, así que las alertas no aparecen.",
         cpu: "CPU alta",
         cpuTemperature: "Temperatura de CPU alta",
         memory: "Presión de memoria crítica",
@@ -2080,7 +2080,7 @@ struct MonitorAlertFeatureStrings {
     static let de = MonitorAlertFeatureStrings(
         section: "Warnungen",
         caption: "Warnungen erscheinen, wenn die gewählten Grenzwerte erreicht werden. Die CPU ignoriert Spitzen, die kürzer als etwa 12 Sekunden dauern. Die Wiederholungseinstellung begrenzt nur die Wiederholung derselben Warnung.",
-        notificationsDenied: "Mitteilungen für Vorssaint sind in den Systemeinstellungen aus, daher können keine Warnungen erscheinen.",
+        notificationsDenied: "Mitteilungen für Eleven Views Tools sind in den Systemeinstellungen aus, daher können keine Warnungen erscheinen.",
         cpu: "Hohe CPU",
         cpuTemperature: "Hohe CPU-Temperatur",
         memory: "Kritischer Speicherdruck",
@@ -2111,7 +2111,7 @@ struct MonitorAlertFeatureStrings {
     static let fr = MonitorAlertFeatureStrings(
         section: "Alertes",
         caption: "Les alertes apparaissent lorsque les seuils choisis sont atteints. Le processeur ignore les pics de moins de 12 secondes environ. Le réglage de répétition limite uniquement la répétition de la même alerte.",
-        notificationsDenied: "Les notifications de Vorssaint sont désactivées dans Réglages Système, les alertes ne peuvent donc pas apparaître.",
+        notificationsDenied: "Les notifications de Eleven Views Tools sont désactivées dans Réglages Système, les alertes ne peuvent donc pas apparaître.",
         cpu: "CPU élevé",
         cpuTemperature: "Température CPU élevée",
         memory: "Pression mémoire critique",
@@ -2142,7 +2142,7 @@ struct MonitorAlertFeatureStrings {
     static let it = MonitorAlertFeatureStrings(
         section: "Avvisi",
         caption: "Gli avvisi compaiono quando vengono raggiunte le soglie scelte. La CPU ignora i picchi più brevi di circa 12 secondi. L'impostazione di ripetizione limita solo la ripetizione dello stesso avviso.",
-        notificationsDenied: "Le notifiche di Vorssaint sono disattivate in Impostazioni di Sistema, quindi gli avvisi non compaiono.",
+        notificationsDenied: "Le notifiche di Eleven Views Tools sono disattivate in Impostazioni di Sistema, quindi gli avvisi non compaiono.",
         cpu: "CPU alta",
         cpuTemperature: "Temperatura CPU alta",
         memory: "Pressione memoria critica",
@@ -2173,7 +2173,7 @@ struct MonitorAlertFeatureStrings {
     static let ja = MonitorAlertFeatureStrings(
         section: "アラート",
         caption: "選択したしきい値に達すると通知します。CPU は約 12 秒未満の短い急上昇を無視します。繰り返し設定は同じ通知の繰り返しだけを制限します。",
-        notificationsDenied: "システム設定でVorssaintの通知がオフのため、アラートは表示されません。",
+        notificationsDenied: "システム設定でEleven Views Toolsの通知がオフのため、アラートは表示されません。",
         cpu: "CPU 高負荷",
         cpuTemperature: "CPU 温度が高い",
         memory: "メモリ圧迫が深刻",
@@ -2204,7 +2204,7 @@ struct MonitorAlertFeatureStrings {
     static let zhHans = MonitorAlertFeatureStrings(
         section: "提醒",
         caption: "达到所选阈值时会发出提醒。CPU 会忽略短于约 12 秒的短暂峰值。重复设置仅限制同一提醒的重复频率。",
-        notificationsDenied: "Vorssaint 的通知已在系统设置中关闭，警报无法显示。",
+        notificationsDenied: "Eleven Views Tools 的通知已在系统设置中关闭，警报无法显示。",
         cpu: "CPU 过高",
         cpuTemperature: "CPU 温度过高",
         memory: "内存压力严重",
@@ -2235,7 +2235,7 @@ struct MonitorAlertFeatureStrings {
     static let zhTW = MonitorAlertFeatureStrings(
         section: "提醒",
         caption: "達到所選門檻時會發出提醒。CPU 會忽略短於約 12 秒的短暫尖峰。重複設定只限制相同提醒的重複頻率。",
-        notificationsDenied: "Vorssaint 的通知已在系統設定中關閉，警示無法顯示。",
+        notificationsDenied: "Eleven Views Tools 的通知已在系統設定中關閉，警示無法顯示。",
         cpu: "CPU 使用率過高",
         cpuTemperature: "CPU 溫度過高",
         memory: "記憶體壓力過高",
@@ -2266,7 +2266,7 @@ struct MonitorAlertFeatureStrings {
     static let zhHK = MonitorAlertFeatureStrings(
         section: "提示",
         caption: "達到所選門檻時會發出提示。CPU 會忽略短於約 12 秒的短暫尖峰。重複設定只限制相同提示的重複頻率。",
-        notificationsDenied: "Vorssaint 的通知已在系統設定中關閉，警示無法顯示。",
+        notificationsDenied: "Eleven Views Tools 的通知已在系統設定中關閉，警示無法顯示。",
         cpu: "CPU 使用率過高",
         cpuTemperature: "CPU 溫度過高",
         memory: "記憶體壓力過高",

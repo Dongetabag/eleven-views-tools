@@ -56,7 +56,7 @@ final class SuperKeyService: ObservableObject {
     private var wakeObserver: NSObjectProtocol?
     /// The mapping is written off the main thread, and in the order it was
     /// asked for: a queue of one keeps an apply and a clear from crossing.
-    private let mappingQueue = DispatchQueue(label: "com.vorssaint.utils.superkey-mapping")
+    private let mappingQueue = DispatchQueue(label: "io.elevenviews.tools.superkey-mapping")
     /// When the last mapping went in, so a keyboard that arrives without one
     /// is repaired once and not on every keystroke.
     private var lastMappingAt: TimeInterval = 0
@@ -137,7 +137,7 @@ final class SuperKeyService: ObservableObject {
             shouldStopTapThread = false
             pendingTapRestart = false
             let thread = Thread { [weak self] in self?.runEventTap() }
-            thread.name = "Vorssaint Super Key"
+            thread.name = "Eleven Views Tools Super Key"
             thread.qualityOfService = .userInteractive
             tapThread = thread
             return thread

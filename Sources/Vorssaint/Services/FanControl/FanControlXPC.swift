@@ -7,9 +7,9 @@ enum FanControlIdentifiers {
     static let teamID = "3D485NHW29"
 
     #if VORSSAINT_DEVELOPMENT
-    static let appBundleID = "com.vorssaint.utils.dev"
+    static let appBundleID = "io.elevenviews.tools.dev"
     #else
-    static let appBundleID = "com.vorssaint.utils"
+    static let appBundleID = "io.elevenviews.tools"
     #endif
 
     static let helperID = "\(appBundleID).fan-control"

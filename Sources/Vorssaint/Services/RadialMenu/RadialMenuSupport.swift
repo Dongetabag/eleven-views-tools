@@ -114,7 +114,7 @@ private struct FailableRadialMenuItem: Decodable {
     }
 }
 
-/// Vorssaint tools a slice can trigger. Raw values persist inside the items
+/// Eleven Views Tools tools a slice can trigger. Raw values persist inside the items
 /// blob; never rename them.
 enum RadialMenuTool: String, Codable, CaseIterable, Identifiable {
     case screenshot, screenRecorder, colorPicker, screenOCR, micMute, clipboardHistory, quickLauncher,
@@ -256,7 +256,7 @@ enum RadialMenuMediaKey: String, Codable, CaseIterable, Identifiable {
 
     var id: String { rawValue }
 
-    /// Now Playing opens Vorssaint's metadata card rather than posting a key.
+    /// Now Playing opens Eleven Views Tools's metadata card rather than posting a key.
     var auxKeyType: Int32? {
         switch self {
         case .playPause: return 16

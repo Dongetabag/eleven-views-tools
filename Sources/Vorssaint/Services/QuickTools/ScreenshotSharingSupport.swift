@@ -39,8 +39,10 @@ struct ScreenshotShareResponse: Decodable {
 }
 
 enum ScreenshotSharingSupport {
-    static let productionEndpoint = URL(string: "https://screenshots.vorssaint.com")!
-    static let developerBundleIdentifier = "com.vorssaint.utils.dev"
+    // Reserved .invalid endpoint keeps sharing safely offline until Eleven Views
+    // provisions and explicitly configures its own production service.
+    static let productionEndpoint = URL(string: "https://sharing.elevenviews.invalid")!
+    static let developerBundleIdentifier = "io.elevenviews.tools.dev"
     static let maximumUploadBytes = 25 * 1_024 * 1_024
 
     static func endpoint(bundleIdentifier: String?, developerOverride: String?) -> URL {

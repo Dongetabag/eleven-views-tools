@@ -125,7 +125,7 @@ final class MediaService: ObservableObject {
 
     @Published private(set) var state: MediaServiceState = .idle
 
-    private let queue = DispatchQueue(label: "com.vorssaint.media", qos: .userInitiated)
+    private let queue = DispatchQueue(label: "io.elevenviews.tools.media", qos: .userInitiated)
     private let lock = NSLock()
     private var operationID: UUID?
     private var token: MediaCancellationToken?

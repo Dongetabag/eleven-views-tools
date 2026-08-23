@@ -203,7 +203,7 @@ enum WindowActivator {
     ///
     /// Our own windows are refused rather than special-cased: reading this
     /// process's own Accessibility tree from the main thread is the one call
-    /// that can deadlock, and Vorssaint has no Dock icon to drag a preview
+    /// that can deadlock, and Eleven Views Tools has no Dock icon to drag a preview
     /// from in the first place.
     @discardableResult
     static func setWindowOrigin(_ origin: CGPoint, windowID: CGWindowID, pid: pid_t) -> Bool {

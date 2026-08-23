@@ -44,7 +44,7 @@ enum QuickLauncherItem: String, PanelOrderItem, Identifiable {
 
 /// The floating quick panel: a small, pretty launcher with the user's
 /// favorite tools, summoned from anywhere with a global shortcut (⌃⌘V by
-/// default; V for Vorssaint). Fully customizable in place: items can be
+/// default; V for Eleven Views Tools). Fully customizable in place: items can be
 /// hidden, brought back and reordered by dragging.
 final class QuickLauncherService: ObservableObject {
     static let shared = QuickLauncherService()
@@ -315,7 +315,7 @@ final class QuickLauncherService: ObservableObject {
                                          styleMask: [.borderless, .nonactivatingPanel],
                                          backing: .buffered,
                                          defer: false)
-        panel.title = "Vorssaint"
+        panel.title = "Eleven Views Tools"
         panel.isReleasedWhenClosed = false
         // Item drag-to-reorder needs the mouse drag for itself; a background-
         // movable window would win the gesture and drag the whole panel.

@@ -4,7 +4,7 @@
 import AppKit
 import IOKit.pwr_mgt
 
-/// Quick subsystem check, run with `Vorssaint --selftest`.
+/// Quick subsystem check, run with `Eleven Views Tools --selftest`.
 /// Core capabilities fail the test; hardware-dependent readings only warn.
 enum SelfTest {
     static func runAndExit() -> Never {
@@ -14,7 +14,7 @@ enum SelfTest {
         var assertionID = IOPMAssertionID(0)
         let result = IOPMAssertionCreateWithName("PreventUserIdleSystemSleep" as CFString,
                                                  IOPMAssertionLevel(kIOPMAssertionLevelOn),
-                                                 "Vorssaint selftest" as CFString,
+                                                 "Eleven Views Tools selftest" as CFString,
                                                  &assertionID)
         if result == kIOReturnSuccess {
             IOPMAssertionRelease(assertionID)
@@ -155,7 +155,7 @@ enum SelfTest {
 }
 
 /// Prints every temperature sensor the monitor would consider, with its
-/// classification. Run with `Vorssaint --sensors`; handy when porting
+/// classification. Run with `Eleven Views Tools --sensors`; handy when porting
 /// the sensor mapping to a new chip generation.
 enum SensorDump {
     static func runAndExit() -> Never {

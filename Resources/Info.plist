@@ -7,13 +7,13 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>Vorssaint</string>
+	<string>Eleven Views Tools</string>
 	<key>CFBundleExecutable</key>
-	<string>Vorssaint</string>
+	<string>ElevenViewsTools</string>
 	<key>CFBundleIconFile</key>
 	<string>AppIcon</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.vorssaint.utils</string>
+	<string>io.elevenviews.tools</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleLocalizations</key>
@@ -33,7 +33,7 @@
 		<string>zh-HK</string>
 	</array>
 	<key>CFBundleName</key>
-	<string>Vorssaint</string>
+	<string>Eleven Views Tools</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -51,29 +51,29 @@
 	<key>LSUIElement</key>
 	<true/>
 	<key>NSAppleEventsUsageDescription</key>
-	<string>Vorssaint uses Automation to move files in Finder, send items to the Trash and open Terminal commands when you ask for Homebrew actions.</string>
+	<string>Eleven Views Tools uses Automation to move files in Finder, send items to the Trash and open Terminal commands when you ask for Homebrew actions.</string>
 	<key>NSAudioCaptureUsageDescription</key>
-	<string>Vorssaint taps individual app audio only to adjust each app's volume in the mixer. Nothing is recorded or leaves your Mac.</string>
+	<string>Eleven Views Tools taps individual app audio only to adjust each app's volume in the mixer. Nothing is recorded or leaves your Mac.</string>
 	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>Vorssaint uses Bluetooth only to read the battery level of connected peripherals. Nothing leaves your Mac.</string>
+	<string>Eleven Views Tools uses Bluetooth only to read the battery level of connected peripherals. Nothing leaves your Mac.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Vorssaint records your microphone only when you turn it on for a screen recording. The audio stays on your Mac unless you choose to create a temporary link.</string>
+	<string>Eleven Views Tools records your microphone only when you turn it on for a screen recording. The audio stays on your Mac unless you choose to create a temporary link.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Vorssaint shows your camera only in the preview window you open, so you can check how you look before a call. Nothing is recorded or leaves your Mac.</string>
+	<string>Eleven Views Tools shows your camera only in the preview window you open, so you can check how you look before a call. Nothing is recorded or leaves your Mac.</string>
 	<key>NSDownloadsFolderUsageDescription</key>
-	<string>Vorssaint checks local metadata in Downloads to review, organize or trash only confirmed WhatsApp files you choose.</string>
+	<string>Eleven Views Tools checks local metadata in Downloads to review, organize or trash only confirmed WhatsApp files you choose.</string>
 	<key>NSDesktopFolderUsageDescription</key>
-	<string>Vorssaint organizes confirmed WhatsApp downloads in a destination folder you explicitly choose.</string>
+	<string>Eleven Views Tools organizes confirmed WhatsApp downloads in a destination folder you explicitly choose.</string>
 	<key>NSDocumentsFolderUsageDescription</key>
-	<string>Vorssaint organizes confirmed WhatsApp downloads in a destination folder you explicitly choose.</string>
+	<string>Eleven Views Tools organizes confirmed WhatsApp downloads in a destination folder you explicitly choose.</string>
 	<key>NSNetworkVolumesUsageDescription</key>
-	<string>Vorssaint organizes confirmed WhatsApp downloads in a destination folder you explicitly choose.</string>
+	<string>Eleven Views Tools organizes confirmed WhatsApp downloads in a destination folder you explicitly choose.</string>
 	<key>NSRemovableVolumesUsageDescription</key>
-	<string>Vorssaint organizes confirmed WhatsApp downloads in a destination folder you explicitly choose.</string>
+	<string>Eleven Views Tools organizes confirmed WhatsApp downloads in a destination folder you explicitly choose.</string>
 	<key>NSCameraUseContinuityCameraDeviceType</key>
 	<true/>
 	<key>NSHumanReadableCopyright</key>
-	<string>© 2026 Vorssaint</string>
+	<string>© 2026 Vorssaint contributors and Eleven Views modifications</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 </dict>

@@ -6,14 +6,14 @@ import Foundation
 /// A kind of result the bar can offer. Raw values are storage ids for the
 /// list of sources the person switched off, so they never change.
 enum CommandBarSource: String, CaseIterable, Identifiable {
-    /// What Vorssaint itself can do. Always on: it is what the bar is for.
+    /// What Eleven Views Tools itself can do. Always on: it is what the bar is for.
     case actions
     case apps
     case menus
     case windows
     case quitApps
     case settingsPages
-    /// The Mac's own Settings panes, which are not Vorssaint's and can be
+    /// The Mac's own Settings panes, which are not Eleven Views Tools's and can be
     /// switched off on their own.
     case macSettings
     case snippets
@@ -120,7 +120,7 @@ enum CommandBarPreferences {
 
     /// What a kind of row is worth before a single letter of it is read.
     ///
-    /// What this Mac holds (the apps, Vorssaint's own actions, the Settings
+    /// What this Mac holds (the apps, Eleven Views Tools's own actions, the Settings
     /// pages) is what people mean; the menu commands of whatever app happens
     /// to be in front are borrowed, and one submenu of history can hold a
     /// dozen rows with the same words in them. So a borrowed row sits under an

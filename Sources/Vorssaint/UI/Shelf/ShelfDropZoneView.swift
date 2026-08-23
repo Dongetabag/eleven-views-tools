@@ -81,7 +81,7 @@ private struct ShelfPill: View {
         }
     }
 
-    /// The Vorssaint mark, quiet, so the pill is unmistakably the app's; it
+    /// The Eleven Views Tools mark, quiet, so the pill is unmistakably the app's; it
     /// flips to a green tick for a beat right after a catch.
     @ViewBuilder
     private var leadingGlyph: some View {

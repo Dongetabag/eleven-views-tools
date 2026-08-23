@@ -26,7 +26,7 @@ enum Shell {
 
 /// Runs a command with administrator privileges (system password prompt).
 enum AdminShell {
-    // Vorssaint is a menu-bar agent (LSUIElement), so it is rarely the active
+    // Eleven Views Tools is a menu-bar agent (LSUIElement), so it is rarely the active
     // app. SecurityAgent attaches its password dialog to the requesting process;
     // when that process is an inactive agent the dialog can open behind the
     // frontmost app and read as "no prompt appeared". Bringing the app forward
@@ -124,14 +124,9 @@ enum AdminShell {
 /// toggle without asking for the administrator password every time.
 /// The password is asked once, when installing (or removing) the rule.
 enum Sudoers {
-    static let rulePath = "/etc/sudoers.d/vorssaint-clamshell"
-    // Rule files written under earlier names; removed whenever the rule is
-    // (re)installed or removed, so the closed-lid permission migrates without an
-    // extra password prompt.
-    private static let legacyRulePaths = [
-        "/etc/sudoers.d/vorssaint-utils-clamshell",
-        "/etc/sudoers.d/vorss-clamshell",
-    ]
+    static let rulePath = "/etc/sudoers.d/eleven-views-tools-clamshell"
+    // Eleven Views uses a distinct rule and does not modify another app's state.
+    private static let legacyRulePaths: [String] = []
 
     private static var safeUser: String? {
         let user = NSUserName()
@@ -144,7 +139,7 @@ enum Sudoers {
     /// disable (launch recovery, a session ending) could resurrect a stale
     /// "1" after the flag was already cleared, leaving lid sleep off with
     /// nothing left to repair it.
-    private static let sleepStateQueue = DispatchQueue(label: "com.vorssaint.utils.pmset-state")
+    private static let sleepStateQueue = DispatchQueue(label: "io.elevenviews.tools.pmset-state")
 
     /// Proves the passwordless path by running it: re-applying the current
     /// SleepDisabled state through `sudo -n` changes nothing on the system and
