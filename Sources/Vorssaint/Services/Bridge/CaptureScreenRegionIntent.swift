@@ -83,21 +83,19 @@ struct ElevenViewsToolsAppShortcuts: AppShortcutsProvider {
     /// Only one `AppShortcutsProvider` may exist per app — keep every bridge
     /// intent discoverable from this single list.
     static var appShortcuts: [AppShortcut] {
-        [
-            AppShortcut(
-                intent: CaptureScreenRegionIntent(),
-                phrases: ["Capture a screen region with \(.applicationName)"],
-                shortTitle: "Capture Screen Region",
-                systemImageName: "camera.viewfinder"),
-            AppShortcut(
-                intent: SystemSnapshotIntent(),
-                phrases: [
-                    "Take a system snapshot with \(.applicationName)",
-                    "Check system health with \(.applicationName)"
-                ],
-                shortTitle: "System Snapshot",
-                systemImageName: "gauge.with.dots.needle.33percent")
-        ]
+        AppShortcut(
+            intent: CaptureScreenRegionIntent(),
+            phrases: ["Capture a screen region with \(.applicationName)"],
+            shortTitle: "Capture Screen Region",
+            systemImageName: "camera.viewfinder")
+        AppShortcut(
+            intent: SystemSnapshotIntent(),
+            phrases: [
+                "Take a system snapshot with \(.applicationName)",
+                "Check system health with \(.applicationName)"
+            ],
+            shortTitle: "System Snapshot",
+            systemImageName: "gauge.with.dots.needle.33percent")
     }
 }
 #endif
