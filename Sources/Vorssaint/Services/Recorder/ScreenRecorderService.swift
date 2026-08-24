@@ -32,7 +32,7 @@ private final class RecorderSession: NSObject, RecorderCaptureEngineDelegate {
     private let microphone: RecorderMicrophoneCapture?
     private let pointer: RecorderPointerSampler
     private let typing: RecorderTypingSampler
-    private let writerQueue = DispatchQueue(label: "com.vorssaint.recorder.writer",
+    private let writerQueue = DispatchQueue(label: "io.elevenviews.tools.recorder.writer",
                                             qos: .userInitiated)
     private let startGate = RecorderStartGate()
     /// Immutable for the whole session, which is what makes it safe to touch
@@ -288,10 +288,12 @@ final class ScreenRecorderService: ObservableObject {
             Permissions.shared.requestScreenRecording()
             return false
         }
-        guard Permissions.shared.accessibility else {
-            Permissions.shared.requestAccessibility()
-            return false
-        }
+        // Accessibility only lets RecorderTypingSampler observe anonymous
+        // key-down timing in other apps for typing-aware automatic zooms. It
+        // is an optional enhancement, not a requirement for ScreenCaptureKit,
+        // pointer tracking, system audio, microphone audio, or writing the
+        // movie. Without the grant the sampler simply produces no global
+        // typing events and recording continues normally.
         guard RecorderSupport.canStart(freeBytes: RecorderTakeStore.shared.freeBytes()) else {
             reportNoSpace()
             return false

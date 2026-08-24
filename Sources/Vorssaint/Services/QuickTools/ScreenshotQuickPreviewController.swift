@@ -384,7 +384,7 @@ private struct ScreenshotQuickPreviewView: View {
     let deleteSharedLink: () -> Void
     let showQR: () -> Void
     let hoverChanged: (Bool) -> Void
-    @AppStorage(DefaultsKey.screenshotSharingEnabled) private var sharingEnabled = true
+    @AppStorage(DefaultsKey.screenshotSharingEnabled) private var sharingEnabled = false
 
     var body: some View {
         VStack(spacing: 10) {

@@ -127,6 +127,12 @@ final class ScreenCaptureService: ObservableObject {
         }
         guard selection == nil, !ScreenshotSelectionController.isSessionOnScreen else { return }
 
+        // Permission guides belong to the action that opened them. Do not let
+        // an old Accessibility card from Window Layout float over a later
+        // screenshot or recording selector and make the new action look
+        // blocked by the wrong permission.
+        PermissionGuideOverlay.shared.dismiss()
+
         let tools = ScreenCaptureTool.available()
         guard !tools.isEmpty else { return }
         let selected = preferred.flatMap { tools.contains($0) ? $0 : nil }
@@ -137,8 +143,15 @@ final class ScreenCaptureService: ObservableObject {
             // direct action keeps the native path when capture access is off.
             if selected == .color {
                 ColorSamplerService.shared.pickNative()
-            } else {
-                Permissions.shared.requestScreenRecording()
+            } else if Permissions.shared.requestScreenRecording() {
+                // CGRequestScreenCaptureAccess waits for the first system
+                // prompt. If the person grants access, honor the capture they
+                // already asked for instead of silently making them click a
+                // second time. The short hop lets the published TCC state
+                // refresh before re-entering this method.
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
+                    self?.capture(initial: selected)
+                }
             }
             return
         }

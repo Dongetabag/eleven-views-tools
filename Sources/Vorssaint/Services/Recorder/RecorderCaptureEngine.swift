@@ -39,7 +39,7 @@ final class RecorderCaptureEngine: NSObject {
 
     weak var delegate: RecorderCaptureEngineDelegate?
 
-    private let queue = DispatchQueue(label: "com.vorssaint.recorder.capture",
+    private let queue = DispatchQueue(label: "io.elevenviews.tools.recorder.capture",
                                       qos: .userInitiated)
     private let lifecycleLock = NSLock()
     private var lifecycle = RecorderCaptureLifecycle()
@@ -59,7 +59,7 @@ final class RecorderCaptureEngine: NSObject {
 
     // MARK: - Lifecycle
 
-    /// Builds the filter and starts the stream. Existing ordinary Vorssaint
+    /// Builds the filter and starts the stream. Existing ordinary Eleven Views Tools
     /// windows remain recordable, while new app chrome stays excluded.
     func start(region: RecorderSupport.Region,
                frameRate: Int,
@@ -252,7 +252,7 @@ final class RecorderMicrophoneCapture: NSObject,
                                        @unchecked Sendable {
     var onSample: ((CMSampleBuffer) -> Void)?
 
-    private let queue = DispatchQueue(label: "com.vorssaint.recorder.microphone",
+    private let queue = DispatchQueue(label: "io.elevenviews.tools.recorder.microphone",
                                       qos: .userInitiated)
     private let session = AVCaptureSession()
     private var targetClock: CMClock?

@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2026 Vorssaint
 
+import AppKit
 import SwiftUI
 
 struct FeedbackView: View {
@@ -10,8 +11,6 @@ struct FeedbackView: View {
     @State private var kind: FeedbackKind
     @State private var message = ""
     @State private var includeDiagnostics = false
-    @State private var isSending = false
-    @State private var wasSent = false
     @State private var errorMessage: String?
 
     private let diagnostics = FeedbackDiagnostics.current()
@@ -25,18 +24,14 @@ struct FeedbackView: View {
     private var count: Int { message.utf16.count }
     private var canSend: Bool {
         let trimmedCount = message.trimmingCharacters(in: .whitespacesAndNewlines).utf16.count
-        return trimmedCount >= 10 && count <= 2_000 && !isSending
+        return trimmedCount >= 10 && count <= 2_000
     }
 
     var body: some View {
         VStack(spacing: 0) {
             header
             Divider()
-            if wasSent {
-                sentView
-            } else {
-                form
-            }
+            form
         }
         .frame(width: 600, height: 650)
     }
@@ -111,10 +106,12 @@ struct FeedbackView: View {
                                 .padding(.leading, 26)
                         }
                         Divider()
-                        Label(strings.privacyNote, systemImage: "hand.raised")
+                        Label("Opens a Mail draft addressed to \(AppInfo.supportEmail). Nothing leaves Eleven Views Tools until you send it from Mail.",
+                              systemImage: "hand.raised")
                             .font(.caption)
                             .foregroundStyle(.secondary)
-                        Label(strings.retentionNote, systemImage: "clock")
+                        Label("Your message remains in your mail account according to your email provider's retention settings.",
+                              systemImage: "clock")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
@@ -133,13 +130,7 @@ struct FeedbackView: View {
                         .lineLimit(2)
                 }
                 Spacer()
-                if isSending {
-                    ProgressView()
-                        .controlSize(.small)
-                    Text(strings.sending)
-                        .foregroundStyle(.secondary)
-                }
-                Button(strings.sendButton) { send() }
+                Button("Open email draft") { send() }
                     .buttonStyle(.borderedProminent)
                     .controlSize(.large)
                     .disabled(!canSend)
@@ -167,7 +158,7 @@ struct FeedbackView: View {
 
     private var diagnosticsPreview: some View {
         Grid(alignment: .leading, horizontalSpacing: 14, verticalSpacing: 5) {
-            diagnosticRow("Vorssaint", "\(diagnostics.appVersion) (\(diagnostics.appBuild))")
+            diagnosticRow("Eleven Views Tools", "\(diagnostics.appVersion) (\(diagnostics.appBuild))")
             diagnosticRow("macOS", diagnostics.macOS)
             if let model = diagnostics.macModel { diagnosticRow("Mac", model) }
             diagnosticRow(l10n.s.languageLabel, diagnostics.language)
@@ -183,47 +174,18 @@ struct FeedbackView: View {
         }
     }
 
-    private var sentView: some View {
-        VStack(spacing: 14) {
-            Image(systemName: "checkmark.circle.fill")
-                .font(.system(size: 54))
-                .foregroundStyle(.green)
-            Text(strings.sentTitle)
-                .font(.title2.weight(.semibold))
-            Text(strings.sentCaption)
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
-                .frame(maxWidth: 400)
-            Button(strings.done, action: onClose)
-                .buttonStyle(.borderedProminent)
-                .controlSize(.large)
-                .padding(.top, 8)
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .padding(40)
-    }
-
     private func send() {
         guard canSend else { return }
-        isSending = true
         errorMessage = nil
-        Task {
-            do {
-                try await FeedbackService.shared.submit(
-                    kind: kind,
-                    message: message,
-                    diagnostics: includeDiagnostics ? diagnostics : nil
-                )
-                wasSent = true
-                message = ""
-            } catch FeedbackError.rateLimited {
-                errorMessage = strings.rateLimitError
-            } catch FeedbackError.unavailable {
-                errorMessage = strings.unavailableError
-            } catch {
-                errorMessage = strings.genericError
-            }
-            isSending = false
+        guard let url = FeedbackService.draftURL(
+            kind: kind,
+            message: message,
+            diagnostics: includeDiagnostics ? diagnostics : nil
+        ), NSWorkspace.shared.open(url) else {
+            errorMessage = strings.genericError
+            return
         }
+        message = ""
+        onClose()
     }
 }

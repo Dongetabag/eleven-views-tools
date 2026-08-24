@@ -38,7 +38,7 @@ final class RecordingShareService: ObservableObject {
         refresh()
     }
 
-    var endpoint: URL {
+    var endpoint: URL? {
         RecordingSharingSupport.endpoint(
             bundleIdentifier: Bundle.main.bundleIdentifier,
             developerOverride: UserDefaults.standard.string(
@@ -80,8 +80,8 @@ final class RecordingShareService: ObservableObject {
               bytes <= RecordingSharingSupport.maximumUploadBytes
         else { throw RecordingShareError.invalidArtifact }
 
-        let serviceEndpoint = endpoint
-        guard let url = RecordingSharingSupport.uploadURL(endpoint: serviceEndpoint,
+        guard let serviceEndpoint = endpoint,
+              let url = RecordingSharingSupport.uploadURL(endpoint: serviceEndpoint,
                                                           duration: duration)
         else { throw RecordingShareError.invalidEndpoint }
 

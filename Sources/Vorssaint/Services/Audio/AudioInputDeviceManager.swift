@@ -13,7 +13,7 @@ struct MixerInputDevice: Identifiable, Equatable {
     fileprivate let audioObjectID: AudioObjectID
 }
 
-/// Keeps Vorssaint's preferred microphone in sync with macOS' global input.
+/// Keeps Eleven Views Tools's preferred microphone in sync with macOS' global input.
 /// This is intentionally separate from the per-app output mixer: selecting a
 /// microphone changes the system default input, without taps or audio capture.
 final class AudioInputDeviceManager: ObservableObject {
@@ -41,7 +41,7 @@ final class AudioInputDeviceManager: ObservableObject {
     /// is delivered here. A device being reconfigured can hold a property read
     /// for as long as the audio daemon holds the device, and that is exactly
     /// the moment the listeners fire.
-    private let halQueue = DispatchQueue(label: "com.vorssaint.utils.audioinput.hal", qos: .userInitiated)
+    private let halQueue = DispatchQueue(label: "io.elevenviews.tools.audioinput.hal", qos: .userInitiated)
     /// The system input as it was before this app first pointed it somewhere
     /// else, and the device it was pointed at. Choosing a microphone here
     /// changes a system setting, so switching the feature off or quitting puts
@@ -403,7 +403,7 @@ final class AudioInputDeviceManager: ObservableObject {
             let name = read(deviceID, kAudioObjectPropertyName, &nameRef)
                 ? nameRef as String
                 : uid
-            guard name != "Vorssaint Mixer" else { continue }
+            guard name != "Eleven Views Tools Mixer" else { continue }
 
             devices.append(MixerInputDevice(id: uid,
                                             uid: uid,

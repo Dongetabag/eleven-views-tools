@@ -43,14 +43,14 @@ jobs:
         run: ./build.sh
 
       - name: Selftest
-        run: ./build/Vorssaint --selftest
+        run: ./build/ElevenViewsTools --selftest
 
       - name: Notarize app
         env:
           NOTARY_API_KEY_P8: ${{ secrets.NOTARY_API_KEY_P8 }}
           NOTARY_KEY_ID: ${{ secrets.NOTARY_KEY_ID }}
           NOTARY_ISSUER_ID: ${{ secrets.NOTARY_ISSUER_ID }}
-        run: ./Tools/notarize.sh build/stage/Vorssaint.app
+        run: ./Tools/notarize.sh "build/stage/Eleven Views Tools.app"
 
       - name: Package DMG
         run: ./Tools/make-dmg.sh
@@ -62,31 +62,13 @@ jobs:
           NOTARY_ISSUER_ID: ${{ secrets.NOTARY_ISSUER_ID }}
         run: ./Tools/notarize.sh dist/*.dmg
 
-      - name: Prepare release showcase media
+      - name: Prepare release files
         id: release_files
         run: |
-          VERSION="${GITHUB_REF_NAME#v}"
-          mkdir -p dist/showcase
-          if [[ "$VERSION" == "3.1.4" ]]; then
-            ASSET="vorssaint-3.1.4-showcase-1.mp4"
-            SOURCE="ReleaseAssets/$ASSET"
-            TARGET="dist/showcase/$ASSET"
-            if [[ -f "$SOURCE" ]]; then
-              cp "$SOURCE" "$TARGET"
-            fi
-            if [[ ! -s "$TARGET" ]]; then
-              echo "Missing required showcase media: $TARGET" >&2
-              echo "The app expects https://github.com/vorssaint/vorssaint-utils/releases/download/v3.1.4/$ASSET" >&2
-              exit 1
-            fi
-          fi
           {
-            echo "FILES<<__VRSS_FILES__"
+            echo "FILES<<__EVT_FILES__"
             printf '%s\n' dist/*.dmg
-            if compgen -G "dist/showcase/*.mp4" > /dev/null; then
-              printf '%s\n' dist/showcase/*.mp4
-            fi
-            echo "__VRSS_FILES__"
+            echo "__EVT_FILES__"
           } >> "$GITHUB_OUTPUT"
 
       - name: Verify notarization
@@ -100,9 +82,9 @@ jobs:
           }
           trap cleanup EXIT
           hdiutil attach -nobrowse -readonly -mountpoint "$MP" "$DMG"
-          spctl -a -t exec -vv "$MP/Vorssaint.app" 2>&1 | tee /tmp/spctl.txt
+          spctl -a -t exec -vv "$MP/Eleven Views Tools.app" 2>&1 | tee /tmp/spctl.txt
           grep -q "source=Notarized Developer ID" /tmp/spctl.txt
-          xcrun stapler validate "$MP/Vorssaint.app"
+          xcrun stapler validate "$MP/Eleven Views Tools.app"
 
       - name: Release notes from CHANGELOG
         id: notes
@@ -121,7 +103,7 @@ jobs:
             echo "NOTES<<__VRSS_EOF__"
             printf '%s\n' "$NOTES"
             echo ""
-            echo "Signed with an Apple Developer ID and notarized by Apple, so it downloads and opens normally. Requires macOS 14 or later. Open the .dmg below and drag Vorssaint to Applications."
+            echo "Signed with an Apple Developer ID and notarized by Apple, so it downloads and opens normally. Requires macOS 14 or later. Open the .dmg below and drag Eleven Views Tools to Applications."
             echo "__VRSS_EOF__"
             if [[ "$VERSION" =~ -(beta|rc|alpha) ]]; then
               echo "PRERELEASE=true"

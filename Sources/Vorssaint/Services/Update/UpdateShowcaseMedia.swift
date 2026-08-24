@@ -6,10 +6,10 @@ import Foundation
 
 enum UpdateShowcaseInfo {
     static let releaseVersion = "3.1.4"
-    static let mediaAssetName = "vorssaint-3.1.4-showcase-1.mp4"
+    static let mediaAssetName = "eleven-views-tools-showcase.mp4"
 
     static var remoteMediaURL: URL {
-        URL(string: "https://github.com/vorssaint/vorssaint-utils/releases/download/v\(releaseVersion)/\(mediaAssetName)")!
+        URL(string: "https://github.com/Dongetabag/eleven-views-tools/releases/download/v\(releaseVersion)/\(mediaAssetName)")!
     }
 
     static var localDeveloperMediaURL: URL? {
@@ -19,14 +19,13 @@ enum UpdateShowcaseInfo {
            FileManager.default.fileExists(atPath: url.path) {
             return url
         }
-        let desktopDemo = URL(fileURLWithPath: "/Users/vorssaint/Desktop/demo.gif")
-        return FileManager.default.fileExists(atPath: desktopDemo.path) ? desktopDemo : nil
+        return nil
     }
 
     static var cacheDirectory: URL {
         let base = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first
             ?? FileManager.default.temporaryDirectory
-        let bundleID = Bundle.main.bundleIdentifier ?? "com.vorssaint.utils"
+        let bundleID = Bundle.main.bundleIdentifier ?? "io.elevenviews.tools"
         return base
             .appendingPathComponent(bundleID, isDirectory: true)
             .appendingPathComponent("UpdateShowcase", isDirectory: true)

@@ -1,4 +1,4 @@
-# Contributing to Vorssaint
+# Contributing to Eleven Views Tools
 
 Thanks for the interest. This project aims to stay small, native and readable.
 
@@ -10,10 +10,10 @@ under GPL-3.0-or-later.
 ## Getting started
 
 ```sh
-git clone https://github.com/vorssaint/vorssaint-utils.git
-cd vorssaint-utils
+git clone https://github.com/Dongetabag/eleven-views-tools.git
+cd eleven-views-tools
 ./build.sh                         # build and assemble the bundle
-./build/Vorssaint --selftest       # quick health check (SELFTEST OK)
+./build/ElevenViewsTools --selftest # quick health check (SELFTEST OK)
 ./build.sh --install               # install into /Applications and launch
 ```
 
@@ -35,7 +35,7 @@ Run this once
 ./Tools/setup-signing.sh
 ```
 
-to create a free, self signed identity called `Vorssaint Utils Signing` in a
+to create a free, self signed identity called `Eleven Views Tools Signing` in a
 dedicated keychain. `build.sh` then signs local builds with it and gives them a
 constant designated requirement, so granted permissions stick across rebuilds.
 It is a local convenience only and never shows up outside the keychain.
@@ -75,7 +75,7 @@ Every user facing string lives in `Core/Localization.swift` as a field of the
 it, and the compiler is the completeness check, so a translation can never
 silently fall out of sync.
 
-Vorssaint ships eight languages today, namely English, Português (Brasil),
+Eleven Views Tools ships eight languages today, namely English, Português (Brasil),
 Español, Deutsch, Français, Italiano, 日本語 and 简体中文. The non base
 translations live in `Core/Localizations/`. To add a language, add a case to
 `AppLanguage` and a `static let` extension of `Strings` with every field
@@ -88,7 +88,7 @@ look like `Tp…` and `Te…`, GPU is `Tg…`, and battery runs from `TB0T` to
 `TB2T`. If a new Apple Silicon generation renames the keys, run this
 
 ```sh
-./build/Vorssaint --sensors
+./build/ElevenViewsTools --sensors
 ```
 
 and open a PR with the dump and the adjusted prefixes.
@@ -96,9 +96,9 @@ and open a PR with the dump and the adjusted prefixes.
 ## Reporting bugs and requesting features
 
 You do not need to write code to help. Use the issue forms on the
-[new issue](https://github.com/vorssaint/vorssaint-utils/issues/new/choose) page.
+[new issue](https://github.com/Dongetabag/eleven-views-tools/issues/new/choose) page, or email [dev@elevenviews.io](mailto:dev@elevenviews.io).
 
-- **Bug report.** Include your Vorssaint version from Settings under About and
+- **Bug report.** Include your Eleven Views Tools version from Settings under About and
   your macOS version, plus clear steps to reproduce. The
   [troubleshooting guide](docs/TROUBLESHOOTING.md) explains what makes a report
   useful.

@@ -2274,12 +2274,16 @@ struct MetricsTests {
                "update intro navigates back without closing")
         expect(SupportUpdateIntroStep.allCases == [.discord, .social, .support],
                "update intro page indicators follow the navigation order")
-        expect(AppInfo.discordURL.absoluteString == "https://discord.gg/M6BwWH4BJp",
-               "the community action uses the permanent Discord invitation")
-        expect(AppInfo.coffeeURL.absoluteString == "https://buymeacoffee.com/vorssaint",
-               "financial support uses Buy Me a Coffee")
-        expect(AppInfo.socialURL.absoluteString == "https://x.com/vorssaint",
-               "social previews keep the official X profile")
+        expect(AppInfo.discordURL.absoluteString == "https://elevenviews.io",
+               "the community action uses the Eleven Views website")
+        expect(AppInfo.coffeeURL.absoluteString == "https://elevenviews.io",
+               "financial support uses the Eleven Views website")
+        expect(AppInfo.socialURL.absoluteString == "https://elevenviews.io",
+               "social previews use the Eleven Views website")
+        expect(AppInfo.websiteURL.absoluteString == "https://elevenviews.io"
+               && AppInfo.supportEmail == "dev@elevenviews.io"
+               && AppInfo.supportEmailURL.absoluteString == "mailto:dev@elevenviews.io",
+               "website and support actions use the owned Eleven Views identity")
         // AppInfo.version falls back to "dev" in this bare harness, so read
         // the plist the shipped app will actually carry. The pin is a
         // per-release decision: this check fails on every version bump so the
@@ -3286,7 +3290,7 @@ struct MetricsTests {
         expect(CleanerSupport.isProtectedBundleID("com.apple.Music")
                && CleanerSupport.isProtectedBundleID("com.apple")
                && CleanerSupport.isProtectedBundleID("group.com.apple.notes")
-               && CleanerSupport.isProtectedBundleID("com.vorssaint.utils"),
+               && CleanerSupport.isProtectedBundleID("io.elevenviews.tools"),
                "system domains and this app can never be junk owners")
         expect(!CleanerSupport.isProtectedBundleID("com.vendor.editor"),
                "third party identifiers are eligible for the leftover check")
@@ -3297,7 +3301,7 @@ struct MetricsTests {
                && UninstallerSupport.verifiedBundleID("") == nil
                && UninstallerSupport.verifiedBundleID("plain-name") == nil
                && UninstallerSupport.verifiedBundleID("com.vendor../escape") == nil
-               && UninstallerSupport.verifiedBundleID("com.vorssaint.utils") == nil
+               && UninstallerSupport.verifiedBundleID("io.elevenviews.tools") == nil
                && UninstallerSupport.verifiedBundleID("com.apple.system") == nil,
                "malformed, protected and current app identifiers never enter uninstall paths")
         let uninstallAppURL = URL(fileURLWithPath: "/Applications/Editor.app")
@@ -6652,8 +6656,8 @@ struct MetricsTests {
                "beta is not newer than the released final version")
 
         // Release candidate selection
-        let dummyDMG = URL(string: "https://github.com/vorssaint/vorssaint-utils/releases/download/v3.3.4/Vorssaint.dmg")!
-        let dummyBetaDMG = URL(string: "https://github.com/vorssaint/vorssaint-utils/releases/download/v3.3.4-beta.1/Vorssaint.dmg")!
+        let dummyDMG = URL(string: "https://github.com/Dongetabag/eleven-views-tools/releases/download/v3.3.4/Eleven-Views-Tools.dmg")!
+        let dummyBetaDMG = URL(string: "https://github.com/Dongetabag/eleven-views-tools/releases/download/v3.3.4-beta.1/Eleven-Views-Tools.dmg")!
 
         let candidateList = [
             UpdateServiceSupport.ReleaseCandidate(tagName: "v3.3.4-beta.1", isPrerelease: true, isDraft: false, dmgURL: dummyBetaDMG, dmgExpectedBytes: 1000, body: "Beta notes"),
@@ -7340,8 +7344,8 @@ struct MetricsTests {
                "a click after hiding lets the Dock bring the app back")
         expect(DockClickSupport.repeatDecision(lastAction: .hide, elapsed: 0.1) == .swallow,
                "an accidental double-click never hides and immediately reopens the app")
-        expect(DockClickSupport.isOwnBundleIdentifier("com.vorssaint.utils")
-                && DockClickSupport.isOwnBundleIdentifier("com.vorssaint.utils.dev")
+        expect(DockClickSupport.isOwnBundleIdentifier("io.elevenviews.tools")
+                && DockClickSupport.isOwnBundleIdentifier("io.elevenviews.tools.dev")
                 && !DockClickSupport.isOwnBundleIdentifier("com.example.editor")
                 && !DockClickSupport.isOwnBundleIdentifier(nil),
                "Dock clicks never target either build of this app")
@@ -8434,7 +8438,7 @@ struct MetricsTests {
         ![Menu bar temperature metrics](Resources/Images/menu-bar-temperature-metrics.png)
 
         ### Website
-        - Official site: [vorssaint.com](https://vorssaint.com).
+        - Official site: [elevenviews.io](https://elevenviews.io).
 
         ## [2.17.1] - 2026-06-17
 
@@ -8477,7 +8481,7 @@ struct MetricsTests {
         ### Fixed
         - Update preview stays focused on changes.
 
-        Signed with an Apple Developer ID and notarized by Apple, so it downloads and opens normally. Requires macOS 14 or later. Open the .dmg below and drag Vorssaint to Applications.
+        Signed with an Apple Developer ID and notarized by Apple, so it downloads and opens normally. Requires macOS 14 or later. Open the .dmg below and drag Eleven Views Tools to Applications.
         """
         let inAppUpdateBody = ReleaseNotes.inAppUpdateNotes(from: githubReleaseBodyWithFooter) ?? ""
         expect(!inAppUpdateBody.contains("Signed with an Apple Developer ID"),
@@ -9091,7 +9095,7 @@ struct MetricsTests {
         expect(bundleLocalizations.contains("tr"), "Info.plist declares Turkish as a bundle localization")
         expect(bundleLocalizations.contains("ko"), "Info.plist declares Korean as a bundle localization")
         let baseAudioPrompt = infoPlist?["NSAudioCaptureUsageDescription"] as? String ?? ""
-        expect(baseAudioPrompt.contains("Vorssaint taps individual app audio"),
+        expect(baseAudioPrompt.contains("Eleven Views Tools taps individual app audio"),
                "base audio permission prompt is an English fallback")
         let organizerFolderPromptKeys = [
             "NSDesktopFolderUsageDescription", "NSDocumentsFolderUsageDescription",
@@ -9584,9 +9588,8 @@ struct MetricsTests {
         expect(AppFeature.screenshot.permissions == [.screenRecording]
                 && AppFeature.screenshot.onboardingPermissions == [.screenRecording],
                "screenshots only need the screen recording grant")
-        expect(AppFeature.screenRecorder.onboardingPermissions
-                == [.screenRecording, .accessibility],
-               "the recorder choice explains both permissions it needs")
+        expect(AppFeature.screenRecorder.onboardingPermissions == [.screenRecording],
+               "recording setup asks only for the grant required to record")
         expect(AppFeature.cleaner.onboardingPermissions.isEmpty
                 && AppFeature.cameraPreview.onboardingPermissions.isEmpty,
                "contextual grants are not requested during first setup")
@@ -11876,6 +11879,43 @@ struct MetricsTests {
                     ".opacity(options.selectedTool == .recording ? 1 : 0)"),
                "capture modes reserve the recording controls' height so the chooser never jumps")
 
+        let permissionsSource = (try? String(
+            contentsOfFile: "Sources/Vorssaint/Core/Permissions.swift",
+            encoding: .utf8)) ?? ""
+        let captureServiceSource = (try? String(
+            contentsOfFile: "Sources/Vorssaint/Services/QuickTools/ScreenCaptureService.swift",
+            encoding: .utf8)) ?? ""
+        expect(permissionsSource.contains("let granted = CGRequestScreenCaptureAccess()")
+                && permissionsSource.contains("if openSettingsWhenDenied")
+                && permissionsSource.contains("openScreenRecordingSettings()"),
+               "a denied or stale screen-capture grant opens the exact macOS recovery pane")
+        expect(captureServiceSource.contains(
+            "else if Permissions.shared.requestScreenRecording()")
+                && captureServiceSource.contains("self?.capture(initial: selected)")
+                && captureServiceSource.contains("PermissionGuideOverlay.shared.dismiss()"),
+               "granting Screen Recording resumes the capture the person already requested")
+
+        let recorderServiceSource = (try? String(
+            contentsOfFile: "Sources/Vorssaint/Services/Recorder/ScreenRecorderService.swift",
+            encoding: .utf8)) ?? ""
+        let recorderSettingsSource = (try? String(
+            contentsOfFile: "Sources/Vorssaint/UI/Settings/ScreenRecorderSettings.swift",
+            encoding: .utf8)) ?? ""
+        expect(!recorderServiceSource.contains(
+            "guard Permissions.shared.accessibility else")
+                && !recorderSettingsSource.contains(
+                    "PermissionRow(kind: .accessibility)"),
+               "screen recording never blocks on optional typing-timing accessibility")
+
+        let captureIntentSource = (try? String(
+            contentsOfFile: "Sources/Vorssaint/Services/Bridge/CaptureScreenRegionIntent.swift",
+            encoding: .utf8)) ?? ""
+        expect(captureIntentSource.contains("CGPreflightScreenCaptureAccess()")
+                && captureIntentSource.contains(
+                    "Permissions.shared.requestScreenRecording()")
+                && captureIntentSource.contains("throw CaptureIntentError(receipt: permissionReceipt())"),
+               "the App Intent owns the native Screen Recording request and a readable denial")
+
         let cocoa = ScreenshotSupport.cocoaRect(fromWindowServer: CGRect(x: 10, y: 30, width: 200, height: 100),
                                                 mainScreenHeight: 900)
         expect(cocoa == CGRect(x: 10, y: 770, width: 200, height: 100),
@@ -12351,8 +12391,8 @@ struct MetricsTests {
                "screenshot number shortcuts ship enabled")
         expect(Defaults.registeredDefaults[DefaultsKey.screenshotPreviewPosition] as? String == "",
                "screenshot preview placement preserves the existing automatic behavior by default")
-        expect(Defaults.registeredDefaults[DefaultsKey.screenshotSharingEnabled] as? Bool == true,
-               "temporary screenshot links preserve their existing availability by default")
+        expect(Defaults.registeredDefaults[DefaultsKey.screenshotSharingEnabled] as? Bool == false,
+               "temporary screenshot links stay off until an owned service is configured")
         expect(Defaults.registeredDefaults[DefaultsKey.screenshotToolOrder] as? String
                 == ScreenshotSupport.Tool.defaultOrderStorage,
                "the screenshot rail ships in its useful numbered order")
@@ -12378,19 +12418,18 @@ struct MetricsTests {
         let testShareEndpoint = ScreenshotSharingSupport.endpoint(
             bundleIdentifier: ScreenshotSharingSupport.developerBundleIdentifier,
             developerOverride: "https://test.example/")
-        expect(testShareEndpoint.absoluteString == "https://test.example"
+        expect(testShareEndpoint?.absoluteString == "https://test.example"
                 && ScreenshotSharingSupport.endpoint(
                     bundleIdentifier: "com.vorssaint.utils",
-                    developerOverride: "https://test.example").absoluteString
-                    == ScreenshotSharingSupport.productionEndpoint.absoluteString
+                    developerOverride: "https://test.example") == nil
                 && ScreenshotSharingSupport.endpoint(
                     bundleIdentifier: ScreenshotSharingSupport.developerBundleIdentifier,
-                    developerOverride: "http://test.example")
-                    == ScreenshotSharingSupport.productionEndpoint,
+                    developerOverride: "http://test.example") == nil,
                "only the Developer build accepts a valid HTTPS test endpoint")
-        expect(ScreenshotSharingSupport.uploadURL(endpoint: testShareEndpoint,
-                                                  duration: .sixHours)?.absoluteString
-                == "https://test.example/v1/screenshots?expiresIn=21600",
+        expect(testShareEndpoint.flatMap {
+            ScreenshotSharingSupport.uploadURL(endpoint: $0,
+                                                duration: .sixHours)?.absoluteString
+        } == "https://test.example/v1/screenshots?expiresIn=21600",
                "sharing builds the fixed upload route and expiration query")
         let shareNow = Date(timeIntervalSince1970: 1_000)
         let shareResponse = ScreenshotShareResponse(
@@ -12398,19 +12437,22 @@ struct MetricsTests {
             viewPath: "/s/\(String(repeating: "a", count: 32))",
             expiresAt: "1970-01-01T01:16:40.125Z",
             deleteToken: String(repeating: "b", count: 43))
-        expect(ScreenshotSharingSupport.record(response: shareResponse,
-                                                endpoint: testShareEndpoint,
-                                                now: shareNow)?.url.absoluteString
-                == "https://test.example/s/\(String(repeating: "a", count: 32))",
+        expect(testShareEndpoint.flatMap {
+            ScreenshotSharingSupport.record(response: shareResponse,
+                                             endpoint: $0,
+                                             now: shareNow)?.url.absoluteString
+        } == "https://test.example/s/\(String(repeating: "a", count: 32))",
                "a valid service response becomes an owner-held link record")
         let forgedShareResponse = ScreenshotShareResponse(
             id: "guessable",
             viewPath: "/s/guessable",
             expiresAt: "1970-01-01T01:16:40.125Z",
             deleteToken: "short")
-        expect(ScreenshotSharingSupport.record(response: forgedShareResponse,
-                                                endpoint: testShareEndpoint,
-                                                now: shareNow) == nil,
+        expect(testShareEndpoint.flatMap {
+            ScreenshotSharingSupport.record(response: forgedShareResponse,
+                                             endpoint: $0,
+                                             now: shareNow)
+        } == nil,
                "guessable ids and short deletion tokens are rejected")
         expect(Defaults.registeredDefaults[DefaultsKey.panelUtilityScreenshot] as? Bool == true,
                "the panel row ships visible like its siblings")
@@ -12658,7 +12700,7 @@ struct MetricsTests {
 
         // Muting every microphone, not just the one the Mac is set to: an app
         // pointed at a device of its own has to go silent too.
-        expect(MicMuteSupport.isOwnDevice(name: "Vorssaint Mixer")
+        expect(MicMuteSupport.isOwnDevice(name: "Eleven Views Tools Mixer")
                 && !MicMuteSupport.isOwnDevice(name: "MacBook Air Microphone"),
                "the mute skips the app's own mixing device and no other")
         expect(!MicMuteSupport.shouldSaveVolume(nil)
@@ -14670,16 +14712,25 @@ struct MetricsTests {
         let appDelegateSource = (try? String(
             contentsOfFile: "Sources/Vorssaint/App/AppDelegate.swift",
             encoding: .utf8)) ?? ""
-        expect(appDelegateSource.contains("if !settingsKeepsAppRegular {")
+        let activationPolicySource = (try? String(
+            contentsOfFile: "Sources/Vorssaint/Services/QuickTools/WindowActivationPolicy.swift",
+            encoding: .utf8)) ?? ""
+        let infoPlistSource = (try? String(
+            contentsOfFile: "Resources/Info.plist",
+            encoding: .utf8)) ?? ""
+        expect(appDelegateSource.contains("NSApp.setActivationPolicy(.regular)")
+                && appDelegateSource.contains("self?.openSettingsWindow()")
                 && appDelegateSource.contains("WindowActivationPolicy.retain()")
-                && appDelegateSource.contains("WindowActivationPolicy.release()"),
-               "Settings retains Command Tab presence only while its window is visible")
+                && appDelegateSource.contains("WindowActivationPolicy.release()")
+                && !activationPolicySource.contains("setActivationPolicy(.accessory)")
+                && !infoPlistSource.contains("LSUIElement"),
+               "Eleven Views Tools stays in the Dock and a Dock reopen restores its window")
         expect(Defaults.registeredDefaults[DefaultsKey.recorderSystemAudio] as? Bool == true,
                "a recording carries the sound of the Mac unless the person turns it off")
         expect(Defaults.registeredDefaults[DefaultsKey.recorderMicrophone] as? Bool == false,
                "microphone recording is optional and ships off")
-        expect(Defaults.registeredDefaults[DefaultsKey.recorderSharingEnabled] as? Bool == true,
-               "temporary recording links stay visible but do nothing until explicitly used")
+        expect(Defaults.registeredDefaults[DefaultsKey.recorderSharingEnabled] as? Bool == false,
+               "temporary recording links stay off until an owned service is configured")
         expect(Defaults.registeredDefaults[DefaultsKey.recorderQuality] as? String == "balanced"
                 && Defaults.registeredDefaults[DefaultsKey.recorderFrameRate] as? Int == 60
                 && Defaults.registeredDefaults[DefaultsKey.recorderCountdown] as? Int == 3
@@ -14736,9 +14787,10 @@ struct MetricsTests {
         let recordingShareEndpoint = RecordingSharingSupport.endpoint(
             bundleIdentifier: RecordingSharingSupport.developerBundleIdentifier,
             developerOverride: "https://test.example/")
-        expect(RecordingSharingSupport.uploadURL(endpoint: recordingShareEndpoint,
-                                                 duration: .sixHours)?.absoluteString
-                == "https://test.example/v1/recordings?expiresIn=21600",
+        expect(recordingShareEndpoint.flatMap {
+            RecordingSharingSupport.uploadURL(endpoint: $0,
+                                               duration: .sixHours)?.absoluteString
+        } == "https://test.example/v1/recordings?expiresIn=21600",
                "recording sharing uses its fixed endpoint and expiration query")
         let recordingID = String(repeating: "r", count: 32)
         let recordingResponse = RecordingShareResponse(
@@ -14746,10 +14798,11 @@ struct MetricsTests {
             viewPath: "/s/\(recordingID)",
             expiresAt: "1970-01-01T06:16:40.000Z",
             deleteToken: String(repeating: "t", count: 43))
-        expect(RecordingSharingSupport.record(response: recordingResponse,
-                                              endpoint: recordingShareEndpoint,
-                                              now: Date(timeIntervalSince1970: 1_000))?.id
-                == recordingID,
+        expect(recordingShareEndpoint.flatMap {
+            RecordingSharingSupport.record(response: recordingResponse,
+                                            endpoint: $0,
+                                            now: Date(timeIntervalSince1970: 1_000))?.id
+        } == recordingID,
                "a valid six-hour recording response becomes an owner-held record")
         let recordingPlan = RecordingSharingSupport.encodingPlan(
             duration: 30,
@@ -16047,6 +16100,38 @@ struct MetricsTests {
                 ScreenCaptureTool.allCases.contains { $0.dedicatedShortcut?.role == role }
                },
                "no capture tool's shortcut row is left without something to register it")
+
+        // MARK: Product outcome placement
+
+        expect(AppFeature.allCases.count == 53,
+               "the product map covers the complete 53-feature catalog")
+        let placementCounts = Dictionary(grouping: AppFeature.allCases,
+                                         by: { $0.productPlacement.outcome })
+            .mapValues(\.count)
+        expect(placementCounts[.capture] == 8
+                && placementCounts[.workspace] == 15
+                && placementCounts[.create] == 1
+                && placementCounts[.meeting] == 4
+                && placementCounts[.health] == 11
+                && placementCounts[.agent] == 1
+                && placementCounts[.advanced] == 13,
+               "every feature has exactly one stable customer outcome")
+        let exposureCounts = Dictionary(grouping: AppFeature.allCases,
+                                        by: { $0.productPlacement.exposure })
+            .mapValues(\.count)
+        expect(exposureCounts[.primary] == 8
+                && exposureCounts[.contextual] == 32
+                && exposureCounts[.advanced] == 13,
+               "feature exposure keeps the first-run surface intentionally small")
+        expect(AppFeature.screenRecorder.productPlacement
+                == FeatureProductPlacement(outcome: .capture, exposure: .primary),
+               "screen recording is a first-class Capture capability")
+        expect(AppFeature.commandBar.productPlacement
+                == FeatureProductPlacement(outcome: .agent, exposure: .primary),
+               "the command bar is the human entrance to Ask Atlas")
+        expect(AppFeature.fanControl.productPlacement
+                == FeatureProductPlacement(outcome: .advanced, exposure: .advanced),
+               "specialist system controls remain advanced")
         // MARK: Private file store
 
         let privateRoot = FileManager.default.temporaryDirectory

@@ -1,5 +1,5 @@
 name: "🐛 Bug Report"
-description: Report a bug or unexpected behavior in Vorssaint
+description: Report a bug or unexpected behavior in Eleven Views Tools
 title: "[Bug]: "
 labels:
   - bug
@@ -20,7 +20,7 @@ body:
       label: Steps to Reproduce
       description: Steps to reproduce the behavior.
       placeholder: |
-        1. Open Vorssaint
+        1. Open Eleven Views Tools
         2. Click on '...'
         3. See error
     validations:
@@ -33,9 +33,9 @@ body:
       description: Add screenshots or recordings if applicable.
 
   - type: input
-    id: vorssaint_version
+    id: eleven_views_tools_version
     attributes:
-      label: Vorssaint Version
+      label: Eleven Views Tools Version
       description: The number shown in Settings, on the About page.
       placeholder: Copy the number from the About page
     validations:

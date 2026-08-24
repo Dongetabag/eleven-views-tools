@@ -1,0 +1,38 @@
+name: Bridge contract
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "docs/bridge/**"
+      - "Tools/bridge/**"
+      - "Sources/Vorssaint/Core/FeatureCatalog.swift"
+      - "Sources/Vorssaint/Services/CommandBar/CommandBarCatalog.swift"
+      - ".github/workflows/bridge.yml"
+  pull_request:
+    paths:
+      - "docs/bridge/**"
+      - "Tools/bridge/**"
+      - "Sources/Vorssaint/Core/FeatureCatalog.swift"
+      - "Sources/Vorssaint/Services/CommandBar/CommandBarCatalog.swift"
+      - ".github/workflows/bridge.yml"
+
+jobs:
+  contract:
+    name: Registry + schema checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install jsonschema
+        run: python -m pip install --disable-pip-version-check jsonschema
+
+      - name: Registry is up to date with FeatureCatalog + CommandBar
+        run: python3 Tools/bridge/bridge_tool.py check
+
+      - name: Validate registry + examples against schemas
+        run: python3 Tools/bridge/bridge_tool.py validate

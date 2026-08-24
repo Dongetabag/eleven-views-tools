@@ -2263,7 +2263,7 @@ final class CommandBarService: ObservableObject {
                                     styleMask: [.borderless, .nonactivatingPanel],
                                     backing: .buffered,
                                     defer: false)
-        panel.title = "Vorssaint"
+        panel.title = "Eleven Views Tools"
         panel.isReleasedWhenClosed = false
         panel.isMovableByWindowBackground = false
         panel.hidesOnDeactivate = false
@@ -2396,7 +2396,7 @@ final class CommandBarService: ObservableObject {
                 switch Int(event.keyCode) {
                 case kVK_ANSI_Q, kVK_ANSI_W, kVK_ANSI_M, kVK_ANSI_H:
                     // The app's menu owns these combinations and the panel is
-                    // key, so they would quit, close or hide Vorssaint while
+                    // key, so they would quit, close or hide Eleven Views Tools while
                     // the person believes they are acting on the app the bar
                     // is floating over.
                     return nil

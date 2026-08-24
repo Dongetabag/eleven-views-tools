@@ -23,7 +23,7 @@ struct ScreenRecordingCaptureSettings: View {
     @AppStorage(DefaultsKey.recorderGIFSize) private var gifSizeRaw =
         RecorderSupport.GIFSize.medium.rawValue
     @AppStorage(DefaultsKey.recorderGIFFrameRate) private var gifFrameRate = 12
-    @AppStorage(DefaultsKey.recorderSharingEnabled) private var sharingEnabled = true
+    @AppStorage(DefaultsKey.recorderSharingEnabled) private var sharingEnabled = false
     @State private var showsMoreOptions = false
     @State private var showingSharedLinks = false
     @State private var showingSharePrivacy = false
@@ -57,9 +57,6 @@ struct ScreenRecordingCaptureSettings: View {
                     .monospacedDigit()
                 if !permissions.screenRecording {
                     PermissionRow(kind: .screenRecording)
-                }
-                if !permissions.accessibility {
-                    PermissionRow(kind: .accessibility)
                 }
             } header: {
                 Text(strings.pageTitle)

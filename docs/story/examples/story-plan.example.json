@@ -1,0 +1,43 @@
+{
+  "schema": "story.plan.v1",
+  "planId": "plan.capture-to-desk-demo",
+  "version": "1.0.0",
+  "briefRef": "brief.capture-to-desk-demo",
+  "status": "approved",
+  "title": "How AI actions become verified work",
+  "opening": "AI taking actions is not enough. You need to know what happened.",
+  "closing": "Agents that work. Evidence you can trust.",
+  "scenes": [
+    {
+      "sceneId": "scene.problem",
+      "purpose": "State the governance problem",
+      "show": "Desk issue requesting evidence",
+      "narration": "AI taking actions is not enough. You need to know what happened.",
+      "sourceRefs": ["flow-capture.capture-to-desk.001"],
+      "claimRefs": [],
+      "durationTargetSeconds": 7,
+      "next": "scene.capture"
+    },
+    {
+      "sceneId": "scene.capture",
+      "purpose": "Show the reviewed capture and verified destination",
+      "show": "Tools captures locally, the user reviews it, and Desk verifies the stored attachment",
+      "narration": "Tools captures locally. You review the exact artifact and destination before Desk verifies what was stored.",
+      "sourceRefs": ["flow-capture.capture-to-desk.001"],
+      "claimRefs": ["claim.capture-verified"],
+      "durationTargetSeconds": 18
+    }
+  ],
+  "outputs": [
+    { "outputId": "output.website", "format": "video", "aspectRatio": "16:9", "targetLengthSeconds": 55 },
+    { "outputId": "output.linkedin", "format": "video", "aspectRatio": "9:16", "targetLengthSeconds": 30 }
+  ],
+  "approval": {
+    "status": "approved",
+    "approvedBy": "simeon-reid",
+    "approvedAt": "2026-08-23T20:05:00Z",
+    "approvalRef": "desk-approval.story-plan.001",
+    "note": "Approved for the first internal vertical slice"
+  },
+  "createdAt": "2026-08-23T20:02:00Z"
+}

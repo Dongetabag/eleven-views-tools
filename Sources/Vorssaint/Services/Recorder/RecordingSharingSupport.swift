@@ -45,8 +45,10 @@ enum RecordingSharingSupport {
         let audioBitRate: Int
     }
 
-    static let productionEndpoint = URL(string: "https://screenshots.vorssaint.com")!
-    static let developerBundleIdentifier = "com.vorssaint.utils.dev"
+    // Sharing remains safely unavailable until Eleven Views provisions and
+    // explicitly configures an owned production service.
+    static let productionEndpoint: URL? = nil
+    static let developerBundleIdentifier = "io.elevenviews.tools.dev"
     /// Leaves transport headroom below the public 100 MB request ceiling.
     static let maximumUploadBytes = 96_000_000
     static let targetUploadBytes = 90_000_000
@@ -54,7 +56,7 @@ enum RecordingSharingSupport {
     static let minimumVideoBitRate = 350_000
     static let audioBitRate = 128_000
 
-    static func endpoint(bundleIdentifier: String?, developerOverride: String?) -> URL {
+    static func endpoint(bundleIdentifier: String?, developerOverride: String?) -> URL? {
         guard bundleIdentifier == developerBundleIdentifier,
               let developerOverride,
               let candidate = ScreenshotSharingSupport.sanitizedEndpoint(developerOverride)

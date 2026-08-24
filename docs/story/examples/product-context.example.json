@@ -1,0 +1,71 @@
+{
+  "schema": "atlas.product-context.v1",
+  "contextId": "product-context.desk.2026-08-23",
+  "version": "1.0.0",
+  "status": "approved",
+  "scope": { "companyId": "eleven-views", "productId": "desk" },
+  "product": {
+    "name": "Eleven Views Desk",
+    "description": "A governed work surface for agent tasks, approvals, artifacts, and receipts.",
+    "build": "2026.08.23",
+    "releaseChannel": "production",
+    "releasedAt": "2026-08-23T20:00:00Z"
+  },
+  "capabilities": [
+    {
+      "capabilityId": "capture-to-desk",
+      "name": "Capture-to-Desk",
+      "description": "Attach a reviewed local capture to a scoped Desk issue and verify the stored bytes.",
+      "state": "released",
+      "claimRefs": ["claim.capture-verified"],
+      "proofRefs": ["proof.capture-to-desk"],
+      "sourceRefs": ["source.tools-pr-10"]
+    }
+  ],
+  "workflows": [
+    {
+      "workflowId": "workflow.capture-to-desk",
+      "name": "Attach verified evidence to a Desk issue",
+      "state": "released",
+      "steps": ["Capture locally", "Review the artifact", "Approve the Desk destination", "Verify the stored attachment"],
+      "sourceRefs": ["source.tools-pr-10"]
+    }
+  ],
+  "claims": [
+    {
+      "claimId": "claim.capture-verified",
+      "text": "Capture-to-Desk verifies the stored attachment bytes after upload.",
+      "status": "approved",
+      "evidenceRefs": ["proof.capture-to-desk"],
+      "sourceRefs": ["source.tools-pr-10"],
+      "approvedBy": "simeon-reid",
+      "approvedAt": "2026-08-23T20:00:00Z"
+    }
+  ],
+  "proof": [
+    {
+      "assetId": "proof.capture-to-desk",
+      "kind": "document",
+      "uri": "https://github.com/Dongetabag/eleven-views-tools/pull/10",
+      "sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+      "bytes": 1,
+      "mediaType": "text/html",
+      "privacy": "public"
+    }
+  ],
+  "sourceRefs": [
+    {
+      "sourceId": "source.tools-pr-10",
+      "kind": "github",
+      "label": "Capture-to-Desk hardening pull request",
+      "uri": "https://github.com/Dongetabag/eleven-views-tools/pull/10",
+      "observedAt": "2026-08-23T20:00:00Z",
+      "confidence": "high",
+      "derivation": "observed",
+      "approvedBy": "simeon-reid",
+      "approvedAt": "2026-08-23T20:00:00Z"
+    }
+  ],
+  "verifiedAt": "2026-08-23T20:00:00Z",
+  "approvedBy": "simeon-reid"
+}

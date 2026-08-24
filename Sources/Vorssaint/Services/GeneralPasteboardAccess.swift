@@ -15,7 +15,7 @@ final class GeneralPasteboardAccess {
     private let queueKey = DispatchSpecificKey<UInt8>()
     private let queueValue: UInt8 = 1
 
-    init(label: String = "Vorssaint.Pasteboard.general") {
+    init(label: String = "Eleven Views Tools.Pasteboard.general") {
         queue = DispatchQueue(label: label, qos: .utility)
         queue.setSpecific(key: queueKey, value: queueValue)
     }

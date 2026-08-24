@@ -1,0 +1,30 @@
+{
+  "schema": "tools.flow-capture.v1",
+  "captureId": "flow-capture.capture-to-desk.001",
+  "version": "1.0.0",
+  "productContextRef": "product-context.desk.2026-08-23",
+  "workflowRef": "workflow.capture-to-desk",
+  "capturedAt": "2026-08-23T20:10:00Z",
+  "display": { "width": 3024, "height": 1964, "scale": 2, "displayId": "main" },
+  "applications": [
+    { "bundleId": "io.elevenviews.tools", "name": "Eleven Views Tools", "windowTitle": "Screen capture" },
+    { "bundleId": "io.elevenviews.desk", "name": "Eleven Views Desk", "windowTitle": "Capture-to-Desk" }
+  ],
+  "recordingAsset": {
+    "assetId": "asset.capture-to-desk.mov",
+    "kind": "capture",
+    "uri": "file:///owner-only/story/capture-to-desk.mov",
+    "sha256": "3333333333333333333333333333333333333333333333333333333333333333",
+    "bytes": 1000,
+    "mediaType": "video/quicktime",
+    "privacy": "owner-only"
+  },
+  "audioAssets": [],
+  "events": [
+    { "eventId": "event.001", "type": "pointer", "timeMs": 900, "x": 862, "y": 421, "applicationBundleId": "io.elevenviews.tools" },
+    { "eventId": "event.002", "type": "click", "timeMs": 1200, "x": 862, "y": 421, "button": "primary", "applicationBundleId": "io.elevenviews.tools", "note": "Capture region" },
+    { "eventId": "event.003", "type": "scene-candidate", "timeMs": 1200, "note": "Start local capture review" }
+  ],
+  "privacy": { "classification": "owner-only", "reviewStatus": "passed", "findingRefs": [] },
+  "createdBy": "simeon-reid"
+}

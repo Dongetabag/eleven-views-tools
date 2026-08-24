@@ -914,7 +914,7 @@ enum CommandBarCatalog {
     // MARK: - Running apps and their windows
 
     /// Menu commands of the app in front, each one runnable and each one
-    /// showing its own shortcut. This is how the bar reaches past Vorssaint
+    /// showing its own shortcut. This is how the bar reaches past Eleven Views Tools
     /// without searching files or the internet.
     static func menuEntries(_ items: [CommandBarMenuItem],
                             appName: String,
@@ -1385,7 +1385,7 @@ enum CommandBarCatalog {
     /// Puts the selection on the shelf without disturbing what the person has
     /// copied: a pasteboard of our own carries it across.
     private static func keepOnShelf(_ text: String) {
-        let board = NSPasteboard(name: NSPasteboard.Name("com.vorssaint.commandbar.selection"))
+        let board = NSPasteboard(name: NSPasteboard.Name("io.elevenviews.tools.commandbar.selection"))
         board.clearContents()
         board.setString(text, forType: .string)
         guard ShelfService.shared.accept(pasteboard: board) else {

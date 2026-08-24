@@ -38,7 +38,7 @@ final class ScreenshotShareService: ObservableObject {
         refresh()
     }
 
-    var endpoint: URL {
+    var endpoint: URL? {
         ScreenshotSharingSupport.endpoint(
             bundleIdentifier: Bundle.main.bundleIdentifier,
             developerOverride: UserDefaults.standard.string(
@@ -73,8 +73,8 @@ final class ScreenshotShareService: ObservableObject {
               pngData.count <= ScreenshotSharingSupport.maximumUploadBytes,
               pngData.starts(with: [137, 80, 78, 71, 13, 10, 26, 10])
         else { throw ScreenshotShareError.invalidImage }
-        let serviceEndpoint = endpoint
-        guard let url = ScreenshotSharingSupport.uploadURL(endpoint: serviceEndpoint,
+        guard let serviceEndpoint = endpoint,
+              let url = ScreenshotSharingSupport.uploadURL(endpoint: serviceEndpoint,
                                                            duration: duration)
         else { throw ScreenshotShareError.invalidEndpoint }
 

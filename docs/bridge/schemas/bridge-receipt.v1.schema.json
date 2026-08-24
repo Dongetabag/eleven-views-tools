@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://elevenviews.io/schemas/bridge/bridge-receipt.v1.schema.json",
+  "title": "ElevenViewsBridge Receipt v1",
+  "description": "The evidence record returned after the bridge finishes (or refuses) a request. Every request produces exactly one receipt.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "receiptId", "requestId", "capability", "outcome", "permissionsUsed", "startedAt", "completedAt", "host"],
+  "properties": {
+    "schema": { "const": "elevenviews.bridge.receipt.v1" },
+    "receiptId": { "type": "string", "format": "uuid" },
+    "requestId": {
+      "type": "string",
+      "format": "uuid",
+      "description": "The originating request's id."
+    },
+    "capability": {
+      "type": "string",
+      "pattern": "^[a-z][a-zA-Z0-9]*(\\.[a-z][a-zA-Z0-9]*)+$"
+    },
+    "outcome": {
+      "type": "string",
+      "enum": ["success", "failed", "denied", "cancelled", "needs_permission", "needs_approval"],
+      "description": "denied = policy/caller rejected; needs_permission = a macOS grant is missing; needs_approval = approvalRequired and no valid token."
+    },
+    "artifacts": {
+      "type": "array",
+      "description": "What the action produced. File artifacts stay local until a separate, user-approved share capability moves them.",
+      "items": { "$ref": "#/$defs/artifact" }
+    },
+    "permissionsUsed": {
+      "type": "array",
+      "description": "macOS permissions actually exercised, mirrored from AppPermission raw values.",
+      "items": {
+        "type": "string",
+        "enum": [
+          "accessibility",
+          "screenRecording",
+          "fullDiskAccess",
+          "filesAndFolders",
+          "notifications",
+          "automationFinder",
+          "automationTerminal",
+          "audioCapture",
+          "microphone",
+          "camera",
+          "appManagement"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "approval": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["token"],
+          "properties": {
+            "token": { "type": "string" },
+            "grantedBy": { "type": "string" }
+          }
+        }
+      ]
+    },
+    "error": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["code", "message"],
+          "properties": {
+            "code": { "type": "string" },
+            "message": { "type": "string" }
+          }
+        }
+      ]
+    },
+    "startedAt": { "type": "string", "format": "date-time" },
+    "completedAt": { "type": "string", "format": "date-time" },
+    "host": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["app", "version"],
+      "properties": {
+        "app": { "type": "string" },
+        "version": { "type": "string" },
+        "registryVersion": { "type": "integer", "minimum": 1 }
+      }
+    }
+  },
+  "$defs": {
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind"],
+      "properties": {
+        "kind": { "type": "string", "enum": ["file", "text", "json", "image"] },
+        "path": { "type": "string", "description": "Local filesystem path for file/image artifacts." },
+        "mimeType": { "type": "string" },
+        "bytes": { "type": "integer", "minimum": 0 },
+        "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "inline": { "description": "Inline value for small text/json artifacts." },
+        "description": { "type": "string" }
+      }
+    }
+  }
+}

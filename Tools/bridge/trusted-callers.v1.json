@@ -1,0 +1,31 @@
+{
+  "schema": "elevenviews.bridge.trusted-callers.v1",
+  "policyVersion": 1,
+  "requireExplicitAllowlist": true,
+  "callers": [
+    {
+      "id": "io.elevenviews.desk",
+      "name": "Eleven Views Desk",
+      "teamId": "EV11VIEWS0",
+      "signingIdentifier": "io.elevenviews.desk",
+      "allowedCapabilities": [
+        "system.snapshot",
+        "screen.captureRegion",
+        "screen.captureFull",
+        "share.attachToDeskIssue"
+      ]
+    },
+    {
+      "id": "io.elevenviews.tools.bridge-harness",
+      "name": "Bridge IPC proof harness",
+      "teamId": "EV11VIEWS0",
+      "signingIdentifier": "io.elevenviews.tools.bridge-harness",
+      "allowedCapabilities": [
+        "system.snapshot",
+        "screen.captureRegion",
+        "power.keepAwake",
+        "display.toggleDarkMode"
+      ]
+    }
+  ]
+}
